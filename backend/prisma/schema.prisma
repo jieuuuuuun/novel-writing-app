@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  name      String   @db.VarChar(100)
+  googleId  String   @unique @map("google_id") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  works Work[]
+
+  @@map("user")
+}
+
+model Work {
+  id        BigInt   @id @default(autoincrement())
+  userId    BigInt   @map("user_id")
+  title     String   @db.VarChar(200)
+  subtitle  String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  episodes Episode[]
+
+  @@map("work")
+}
+
+model Episode {
+  id        BigInt   @id @default(autoincrement())
+  workId    BigInt   @map("work_id")
+  title     String   @db.VarChar(200)
+  content   String   @db.Text
+  sortOrder Int      @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+
+  @@map("episode")
+}
