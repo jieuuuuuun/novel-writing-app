@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   defaultLocale,
@@ -9,6 +10,7 @@ import {
 import { getWorks, postWork } from "@/lib/work-api";
 import type { CreateWorkInput, Work } from "@/types/work";
 import NewWorkModal from "./NewWorkModal";
+import WorkSearch from "./WorkSearch";
 import styles from "@/app/page.module.css";
 
 const navigationIcons = ["▤", "⌁", "□", "◎", "⚙"];
@@ -158,16 +160,14 @@ export default function WorkDashboard() {
             <span>{copy.brand.name}</span>
             <span className={styles.leafMark} aria-hidden="true" />
           </div>
-          <label className={styles.searchBox}>
-            <span className={styles.searchIcon} aria-hidden="true" />
-            <span className={styles.srOnly}>{copy.header.searchPlaceholder}</span>
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder={copy.header.searchPlaceholder}
-            />
-          </label>
+          <WorkSearch
+            works={works}
+            locale={locale}
+            value={searchQuery}
+            placeholder={copy.header.searchPlaceholder}
+            noResults={copy.dashboard.noResultsTitle}
+            onChange={setSearchQuery}
+          />
           <div className={styles.profileArea}>
             <button
               className={styles.notificationButton}
@@ -213,7 +213,11 @@ export default function WorkDashboard() {
               </span>
               <h2>
                 {recentWork
-                  ? recentWork.title
+                  ? (
+                      <Link href={`/works/${recentWork.id}`}>
+                        {recentWork.title}
+                      </Link>
+                    )
                   : copy.dashboard.recentEmptyTitle}
               </h2>
               <p>
@@ -227,6 +231,13 @@ export default function WorkDashboard() {
                   <time dateTime={recentWork.updatedAt}>
                     {formatDate(recentWork.updatedAt, locale)}
                   </time>
+                  <Link
+                    className={styles.continueWritingButton}
+                    href={`/works/${recentWork.id}#recent-episodes`}
+                  >
+                    {copy.dashboard.continueWriting}
+                    <span aria-hidden="true">→</span>
+                  </Link>
                 </div>
               ) : (
                 <button
@@ -322,28 +333,36 @@ export default function WorkDashboard() {
                 </div>
                 <ul>
                   {visibleWorks.map((work) => (
-                    <li className={styles.workItem} key={work.id}>
-                      <div className={styles.workIdentity}>
-                        <span className={styles.documentIcon} aria-hidden="true">
-                          <i />
-                        </span>
-                        <div>
-                          <h3>{work.title}</h3>
-                          {work.subtitle ? <p>{work.subtitle}</p> : null}
+                    <li key={work.id}>
+                      <Link
+                        className={styles.workItem}
+                        href={`/works/${work.id}`}
+                      >
+                        <div className={styles.workIdentity}>
+                          <span
+                            className={styles.documentIcon}
+                            aria-hidden="true"
+                          >
+                            <i />
+                          </span>
+                          <div>
+                            <h3>{work.title}</h3>
+                            {work.subtitle ? <p>{work.subtitle}</p> : null}
+                          </div>
                         </div>
-                      </div>
-                      <div className={styles.dateCell}>
-                        <span>{copy.dashboard.createdAt}</span>
-                        <time dateTime={work.createdAt}>
-                          {formatDate(work.createdAt, locale)}
-                        </time>
-                      </div>
-                      <div className={styles.dateCell}>
-                        <span>{copy.dashboard.updatedAt}</span>
-                        <time dateTime={work.updatedAt}>
-                          {formatDate(work.updatedAt, locale)}
-                        </time>
-                      </div>
+                        <div className={styles.dateCell}>
+                          <span>{copy.dashboard.createdAt}</span>
+                          <time dateTime={work.createdAt}>
+                            {formatDate(work.createdAt, locale)}
+                          </time>
+                        </div>
+                        <div className={styles.dateCell}>
+                          <span>{copy.dashboard.updatedAt}</span>
+                          <time dateTime={work.updatedAt}>
+                            {formatDate(work.updatedAt, locale)}
+                          </time>
+                        </div>
+                      </Link>
                     </li>
                   ))}
                 </ul>

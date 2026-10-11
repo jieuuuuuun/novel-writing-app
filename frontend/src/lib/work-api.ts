@@ -34,6 +34,28 @@ export async function getWorks(signal?: AbortSignal): Promise<Work[]> {
   return (await response.json()) as Work[];
 }
 
+// 작품 ID로 워크스페이스에 표시할 작품 하나를 조회합니다.
+export async function getWork(
+  workId: number,
+  signal?: AbortSignal,
+): Promise<Work | null> {
+  const response = await fetch(`${WORK_API_PATH}/${workId}`, {
+    method: "GET",
+    cache: "no-store",
+    signal,
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as Work | null;
+}
+
 // 새 작품을 등록하고 백엔드가 생성한 전체 Work 데이터를 반환합니다.
 export async function postWork(input: CreateWorkInput): Promise<Work> {
   // 인증 연동 전까지 현재 사용자를 대신할 임시 ID를 환경변수로 받습니다.

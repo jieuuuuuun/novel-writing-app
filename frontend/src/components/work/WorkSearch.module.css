@@ -1,0 +1,141 @@
+.search {
+  position: relative;
+  z-index: 40;
+  width: min(510px, 58vw);
+}
+
+.search > label {
+  height: 37px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  border: 1px solid #ded9ce;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.68);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.search > label:focus-within {
+  border-color: rgba(88, 103, 75, 0.65);
+  box-shadow: 0 0 0 3px rgba(88, 103, 75, 0.08);
+}
+
+.icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border: 1.5px solid #596056;
+  border-radius: 50%;
+}
+
+.icon::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  bottom: -3px;
+  width: 5px;
+  height: 1.5px;
+  background: #596056;
+  transform: rotate(45deg);
+}
+
+.search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+
+.search input::placeholder {
+  color: #969184;
+}
+
+.results {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #dcd6ca;
+  border-radius: 8px;
+  background: rgba(251, 249, 243, 0.98);
+  box-shadow: 0 14px 34px rgba(55, 50, 40, 0.14);
+  backdrop-filter: blur(12px);
+}
+
+.search:not(:focus-within) .results {
+  display: none;
+}
+
+.results ul {
+  list-style: none;
+}
+
+.results li + li {
+  border-top: 1px solid var(--line);
+}
+
+.results a {
+  min-width: 0;
+  display: block;
+  padding: 11px 14px;
+  transition: background 140ms ease;
+}
+
+.results strong,
+.results span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.results strong {
+  color: #353b34;
+  font-family: var(--font-serif);
+  font-size: 13px;
+}
+
+.results span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.results p {
+  padding: 16px 14px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .results a:hover {
+    background: rgba(99, 111, 85, 0.08);
+  }
+}
+
+@media (max-width: 780px) {
+  .search {
+    order: 3;
+    width: 100%;
+  }
+}
