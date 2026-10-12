@@ -6,6 +6,7 @@ interface WorkspaceSidebarProps {
   copy: Messages["workspace"];
   brand: Messages["brand"];
   workId: number;
+  activeMenu?: "home" | "episodes";
   isMobile?: boolean;
   onClose?: () => void;
 }
@@ -16,10 +17,11 @@ export default function WorkspaceSidebar({
   copy,
   brand,
   workId,
+  activeMenu = "home",
   isMobile = false,
   onClose,
 }: WorkspaceSidebarProps) {
-  const navigation = Object.values(copy.navigation);
+  const navigation = Object.entries(copy.navigation);
 
   return (
     <aside
@@ -51,12 +53,20 @@ export default function WorkspaceSidebar({
         {copy.backToWorks}
       </Link>
 
-      <nav aria-label={copy.navigation.home}>
-        {navigation.map((item, index) =>
-          index === 0 ? (
+      <nav aria-label={copy.navigation[activeMenu]}>
+        {navigation.map(([key, item], index) => {
+          const isAvailable = key === "home" || key === "episodes";
+          const href =
+            key === "episodes"
+              ? `/works/${workId}/episodes`
+              : `/works/${workId}`;
+
+          return isAvailable ? (
             <Link
-              className={styles.activeNavItem}
-              href={`/works/${workId}`}
+              className={
+                key === activeMenu ? styles.activeNavItem : styles.navItem
+              }
+              href={href}
               key={item}
               onClick={onClose}
             >
@@ -74,8 +84,8 @@ export default function WorkspaceSidebar({
               <span aria-hidden="true">{navigationIcons[index]}</span>
               {item}
             </button>
-          ),
-        )}
+          );
+        })}
       </nav>
 
       <blockquote>
