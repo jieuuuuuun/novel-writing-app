@@ -13,3 +13,9 @@ export interface CreateWorkInput {
   title: string;
   subtitle?: string;
 }
+
+// 작품 수정 시 PATCH /work/:id에 전달하는 메타정보입니다.
+export interface UpdateWorkInput {
+  title: string;
+  subtitle?: string;
+}

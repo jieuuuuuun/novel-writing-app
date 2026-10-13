@@ -8,9 +8,10 @@ import {
   type Locale,
 } from "@/i18n/messages";
 import { getEpisodesByWork } from "@/lib/episode-api";
-import { getWork, getWorks } from "@/lib/work-api";
+import { getWork, getWorks, patchWork } from "@/lib/work-api";
 import type { Episode } from "@/types/episode";
-import type { Work } from "@/types/work";
+import type { UpdateWorkInput, Work } from "@/types/work";
+import EditWorkModal from "@/components/work/EditWorkModal";
 import WorkSearch from "@/components/work/WorkSearch";
 import RecentEpisodes from "./RecentEpisodes";
 import WorkspaceHero from "./WorkspaceHero";
@@ -48,6 +49,7 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
   const [isLoading, setIsLoading] = useState(isValidWorkId);
   const [loadError, setLoadError] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // 오류 후 다시 시도할 때 작품과 회차를 함께 새로 불러옵니다.
   const loadWorkspace = async () => {
@@ -105,6 +107,20 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
   const statusMessage = loadError
     ? copy.workspace.states.error
     : copy.workspace.states.notFound;
+
+  // 수정 응답을 작품 홈과 상단 검색 목록에 즉시 반영합니다.
+  const handleUpdate = async (
+    targetWorkId: number,
+    input: UpdateWorkInput,
+  ) => {
+    const updatedWork = await patchWork(targetWorkId, input);
+    setWork(updatedWork);
+    setAllWorks((current) =>
+      current.map((item) =>
+        item.id === updatedWork.id ? updatedWork : item,
+      ),
+    );
+  };
 
   return (
     <div className={styles.workspaceShell}>
@@ -222,8 +238,7 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
               <button
                 className={styles.editWorkButton}
                 type="button"
-                disabled
-                title={copy.workspace.editPreparing}
+                onClick={() => setIsEditModalOpen(true)}
               >
                 <span aria-hidden="true">✎</span>
                 {copy.workspace.editWork}
@@ -273,11 +288,21 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
                 copy={copy.workspace}
                 episodes={episodes}
                 locale={locale}
+                workId={numericWorkId}
               />
             </div>
           </main>
         )}
       </div>
+
+      {isEditModalOpen && work ? (
+        <EditWorkModal
+          copy={copy.workEdit}
+          work={work}
+          onClose={() => setIsEditModalOpen(false)}
+          onUpdate={handleUpdate}
+        />
+      ) : null}
     </div>
   );
 }

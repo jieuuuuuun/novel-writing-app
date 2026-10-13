@@ -1,4 +1,8 @@
-import type { CreateWorkInput, Work } from "@/types/work";
+import type {
+  CreateWorkInput,
+  UpdateWorkInput,
+  Work,
+} from "@/types/work";
 
 const WORK_API_PATH = "/api/work";
 
@@ -84,4 +88,35 @@ export async function postWork(input: CreateWorkInput): Promise<Work> {
   }
 
   return (await response.json()) as Work;
+}
+
+// 작품 제목과 부제를 수정하고 서버가 갱신한 Work를 반환합니다.
+export async function patchWork(
+  workId: number,
+  input: UpdateWorkInput,
+): Promise<Work> {
+  const response = await fetch(`${WORK_API_PATH}/${workId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+
+  return (await response.json()) as Work;
+}
+
+// 작품과 cascade 관계의 회차를 함께 삭제합니다.
+export async function deleteWork(workId: number): Promise<void> {
+  const response = await fetch(`${WORK_API_PATH}/${workId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
 }

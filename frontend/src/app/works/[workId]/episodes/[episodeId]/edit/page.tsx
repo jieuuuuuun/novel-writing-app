@@ -1,8 +1,15 @@
 import EpisodeEditorPage from "@/components/episode/EpisodeEditorPage";
 
+interface EditEpisodePageProps {
+  params: Promise<{
+    workId: string;
+    episodeId: string;
+  }>;
+}
+
 export default async function EditEpisodePage({
   params,
-}: PageProps<"/works/[workId]/episodes/[episodeId]/edit">) {
+}: EditEpisodePageProps) {
   const { workId, episodeId } = await params;
 
   return (

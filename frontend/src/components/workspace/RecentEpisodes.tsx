@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo } from "react";
 import type { Locale, Messages } from "@/i18n/messages";
 import type { Episode } from "@/types/episode";
@@ -9,6 +10,7 @@ interface RecentEpisodesProps {
   copy: Messages["workspace"];
   episodes: Episode[];
   locale: Locale;
+  workId: number;
 }
 
 function formatEpisodeDate(value: string, locale: Locale) {
@@ -25,6 +27,7 @@ export default function RecentEpisodes({
   copy,
   episodes,
   locale,
+  workId,
 }: RecentEpisodesProps) {
   // 집필 순서를 우선하므로 sortOrder가 높은 회차부터 최대 4개를 표시합니다.
   const recentEpisodes = useMemo(
@@ -42,14 +45,10 @@ export default function RecentEpisodes({
           <span aria-hidden="true">▱</span>
           {copy.episodes.title}
         </h2>
-        <button
-          type="button"
-          disabled
-          title={copy.quickLinks.preparing}
-        >
+        <Link href={`/works/${workId}/episodes`}>
           {copy.episodes.viewAll}
           <span aria-hidden="true">›</span>
-        </button>
+        </Link>
       </header>
 
       {recentEpisodes.length === 0 ? (
@@ -64,15 +63,21 @@ export default function RecentEpisodes({
         <ol>
           {recentEpisodes.map((episode) => (
             <li key={episode.id}>
-              <span>{copy.episodes.episodeNumber(episode.sortOrder)}</span>
-              <div>
-                <h3>{episode.title}</h3>
-                <time dateTime={episode.updatedAt}>
-                  {copy.updatedAt}{" "}
-                  {formatEpisodeDate(episode.updatedAt, locale)}
-                </time>
-              </div>
-              <span aria-hidden="true">›</span>
+              <Link
+                href={`/works/${workId}/episodes/${episode.id}`}
+              >
+                <span>
+                  {copy.episodes.episodeNumber(episode.sortOrder)}
+                </span>
+                <div>
+                  <h3>{episode.title}</h3>
+                  <time dateTime={episode.updatedAt}>
+                    {copy.updatedAt}{" "}
+                    {formatEpisodeDate(episode.updatedAt, locale)}
+                  </time>
+                </div>
+                <span aria-hidden="true">›</span>
+              </Link>
             </li>
           ))}
         </ol>

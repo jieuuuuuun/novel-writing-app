@@ -58,7 +58,8 @@ export async function getEpisode(
     throw new Error(await readEpisodeError(response));
   }
 
-  return (await response.json()) as Episode;
+  const body = await response.text();
+  return body ? (JSON.parse(body) as Episode) : null;
 }
 
 // 입력한 원고를 새 회차로 저장하고 생성된 Episode를 반환합니다.
