@@ -3,10 +3,15 @@ import type {
   Episode,
   UpdateEpisodeInput,
 } from "@/types/episode";
+import { notifyUnauthorized } from "@/lib/auth-api";
 
 const EPISODE_API_PATH = "/api/episode";
 
 async function readEpisodeError(response: Response): Promise<string> {
+  if (response.status === 401) {
+    notifyUnauthorized();
+  }
+
   try {
     const body = (await response.json()) as {
       message?: string | string[];
@@ -32,7 +37,7 @@ export async function getEpisodesByWork(
   });
 
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    throw new Error(await readEpisodeError(response));
   }
 
   const episodes = (await response.json()) as Episode[];

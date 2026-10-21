@@ -22,6 +22,7 @@ import EditWorkModal from "./EditWorkModal";
 import NewWorkModal from "./NewWorkModal";
 import WorkSearch from "./WorkSearch";
 import WorkSidebar from "./WorkSidebar";
+import UserMenu from "@/components/auth/UserMenu";
 import styles from "@/app/page.module.css";
 
 function formatDate(value: string, locale: Locale) {
@@ -208,14 +209,7 @@ export default function WorkDashboard() {
               <span aria-hidden="true">♢</span>
               <i />
             </button>
-            <button
-              className={styles.profileButton}
-              type="button"
-              aria-label={copy.header.profile}
-            >
-              <span>WR</span>
-              <i aria-hidden="true" />
-            </button>
+            <UserMenu />
           </div>
         </header>
 

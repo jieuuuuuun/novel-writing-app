@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import UserMenu from "@/components/auth/UserMenu";
 import WorkSearch from "@/components/work/WorkSearch";
 import {
   defaultLocale,
@@ -329,7 +330,7 @@ export default function EpisodeEditorPage({
               ? copy.workspace.episodeEditor.saving
               : copy.workspace.episodeEditor.save}
           </button>
-          <i aria-label={copy.header.profile}>WR</i>
+          <UserMenu />
         </div>
       </header>
 

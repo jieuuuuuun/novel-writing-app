@@ -3,11 +3,16 @@ import type {
   UpdateWorkInput,
   Work,
 } from "@/types/work";
+import { notifyUnauthorized } from "@/lib/auth-api";
 
 const WORK_API_PATH = "/api/work";
 
 // 백엔드 오류 응답 형식이 달라도 사용자에게 전달할 메시지로 정리합니다.
 async function readError(response: Response): Promise<string> {
+  if (response.status === 401) {
+    notifyUnauthorized();
+  }
+
   try {
     const body = (await response.json()) as {
       message?: string | string[];
@@ -62,15 +67,6 @@ export async function getWork(
 
 // 새 작품을 등록하고 백엔드가 생성한 전체 Work 데이터를 반환합니다.
 export async function postWork(input: CreateWorkInput): Promise<Work> {
-  // 인증 연동 전까지 현재 사용자를 대신할 임시 ID를 환경변수로 받습니다.
-  const configuredUserId = Number(
-    process.env.NEXT_PUBLIC_DEMO_USER_ID ?? "1",
-  );
-
-  if (!Number.isInteger(configuredUserId) || configuredUserId < 1) {
-    throw new Error("NEXT_PUBLIC_DEMO_USER_ID must be a positive integer.");
-  }
-
   const response = await fetch(WORK_API_PATH, {
     method: "POST",
     headers: {
@@ -79,7 +75,6 @@ export async function postWork(input: CreateWorkInput): Promise<Work> {
     body: JSON.stringify({
       title: input.title,
       subtitle: input.subtitle || undefined,
-      userId: configuredUserId,
     }),
   });
 

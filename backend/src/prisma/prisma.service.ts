@@ -20,6 +20,10 @@ export class PrismaService
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       connectionLimit: 5,
+      // 로컬 MySQL의 caching_sha2_password 인증에서만 공개키 조회를 허용합니다.
+      ...(process.env.NODE_ENV !== 'production'
+        ? { allowPublicKeyRetrieval: true }
+        : {}),
     });
 
     super({ adapter });

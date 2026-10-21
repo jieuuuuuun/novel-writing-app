@@ -1,0 +1,272 @@
+.authScreen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 68% 15%, rgba(255, 255, 255, 0.78), transparent 28rem),
+    var(--cream);
+}
+
+.authCard {
+  width: min(430px, 100%);
+  padding: 48px 42px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: rgba(251, 249, 243, 0.9);
+  box-shadow: 0 20px 55px rgba(62, 58, 48, 0.1);
+  text-align: center;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #2c382d;
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.brand::after {
+  content: "";
+  width: 11px;
+  height: 17px;
+  border-radius: 100% 0 100% 0;
+  background: var(--olive);
+  transform: rotate(28deg);
+}
+
+.authCard h1 {
+  margin-top: 27px;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.04em;
+}
+
+.authCard p {
+  margin: 10px auto 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.loginButton,
+.retryButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 26px;
+  padding: 0 21px;
+  border: 1px solid #58654f;
+  border-radius: 6px;
+  color: #fffdf8;
+  background: #58654f;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.loginButton span {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #596450;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.loadingMark {
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgba(88, 101, 79, 0.18);
+  border-top-color: var(--olive);
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+.userMenu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.profileTrigger {
+  min-width: 35px;
+  min-height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: #f6f2e9;
+  background:
+    linear-gradient(145deg, rgba(39, 48, 35, 0.12), transparent),
+    #6e775f;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.chevron {
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid #343a32;
+  border-bottom: 1.5px solid #343a32;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 150ms ease;
+}
+
+.profileTrigger[aria-expanded="true"] .chevron {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.profileMenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 100;
+  width: min(260px, calc(100vw - 28px));
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: #fbf9f3;
+  box-shadow: 0 16px 38px rgba(48, 46, 39, 0.16);
+  animation: menuIn 140ms ease-out;
+}
+
+.profileInfo {
+  padding: 17px 18px 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profileInfo strong,
+.profileInfo span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.profileInfo strong {
+  color: #343a32;
+  font-family: var(--font-serif);
+  font-size: 15px;
+}
+
+.profileInfo span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.logoutButton {
+  width: 100%;
+  min-height: 43px;
+  padding: 0 18px;
+  border: 0;
+  color: #795a54;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logoutButton:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.logoutError {
+  padding: 0 18px 13px;
+  color: #9b4d3a;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .loginButton:hover,
+  .retryButton:hover {
+    background: #485640;
+    transform: translateY(-1px);
+  }
+
+  .profileTrigger:hover .avatar {
+    background: #5d6853;
+  }
+
+  .logoutButton:not(:disabled):hover {
+    background: rgba(109, 117, 91, 0.08);
+  }
+}
+
+@media (max-width: 560px) {
+  .authCard {
+    padding: 40px 24px;
+  }
+
+  .authCard h1 {
+    font-size: 23px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chevron {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingMark,
+  .profileMenu {
+    animation: none;
+  }
+
+  .loginButton,
+  .retryButton,
+  .chevron {
+    transition: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

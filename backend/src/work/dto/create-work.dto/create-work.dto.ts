@@ -5,6 +5,4 @@ export class CreateWorkDto {
   title: string;
   @ApiPropertyOptional()
   subtitle?: string;
-  @ApiProperty()
-  userId: number;
 }

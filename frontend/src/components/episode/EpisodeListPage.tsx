@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import UserMenu from "@/components/auth/UserMenu";
 import WorkSearch from "@/components/work/WorkSearch";
 import WorkspaceSidebar from "@/components/workspace/WorkspaceSidebar";
 import {
@@ -163,7 +164,7 @@ export default function EpisodeListPage({ workId }: EpisodeListPageProps) {
               ♢
               <i />
             </button>
-            <span aria-label={copy.header.profile}>WR</span>
+            <UserMenu />
           </div>
         </header>
 

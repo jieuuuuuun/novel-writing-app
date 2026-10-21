@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateWorkDto } from './dto/create-work.dto/create-work.dto.js';
 import { UpdateWorkDto } from './dto/update-work.dto/update-work.dto.js';
@@ -7,36 +7,61 @@ import { UpdateWorkDto } from './dto/update-work.dto/update-work.dto.js';
 export class WorkService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createWorkDto: CreateWorkDto) {
+  create(userId: number, createWorkDto: CreateWorkDto) {
     return this.prisma.work.create({
-      data: createWorkDto,
+      data: {
+        title: createWorkDto.title,
+        subtitle: createWorkDto.subtitle,
+        userId,
+      },
     });
   }
 
-  findAll() {
+  findAll(userId: number) {
     return this.prisma.work.findMany({
+      where: { userId },
       orderBy: {
         createdAt: 'desc',
       },
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.work.findUnique({
-      where: { id },
+  async findOne(id: number, userId: number) {
+    const work = await this.prisma.work.findFirst({
+      where: {
+        id,
+        userId,
+      },
     });
+
+    if (!work) {
+      throw new NotFoundException('Work not found.');
+    }
+
+    return work;
   }
 
-  update(id: number, updateWorkDto: UpdateWorkDto) {
+  async update(
+    id: number,
+    userId: number,
+    updateWorkDto: UpdateWorkDto,
+  ) {
+    await this.findOne(id, userId);
+
     return this.prisma.work.update({
       where: { id },
-      data: { ...updateWorkDto },
+      data: {
+        title: updateWorkDto.title,
+        subtitle: updateWorkDto.subtitle,
+      },
     });
   }
 
-  remove(id:number) {
+  async remove(id: number, userId: number) {
+    await this.findOne(id, userId);
+
     return this.prisma.work.delete({
-      where:{id}
-    })
+      where: { id },
+    });
   }
 }

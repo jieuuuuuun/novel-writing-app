@@ -13,6 +13,7 @@ import type { Episode } from "@/types/episode";
 import type { UpdateWorkInput, Work } from "@/types/work";
 import EditWorkModal from "@/components/work/EditWorkModal";
 import WorkSearch from "@/components/work/WorkSearch";
+import UserMenu from "@/components/auth/UserMenu";
 import RecentEpisodes from "./RecentEpisodes";
 import WorkspaceHero from "./WorkspaceHero";
 import WorkspaceQuickLinks from "./WorkspaceQuickLinks";
@@ -169,7 +170,7 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
               ♢
               <i />
             </button>
-            <span aria-label={copy.header.profile}>WR</span>
+            <UserMenu />
           </div>
         </header>
 

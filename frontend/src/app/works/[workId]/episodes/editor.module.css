@@ -61,7 +61,7 @@
   white-space: nowrap;
 }
 
-.saveActions button {
+.saveActions > button {
   min-width: 76px;
   min-height: 37px;
   padding: 0 16px;
@@ -77,7 +77,7 @@
     opacity 160ms ease;
 }
 
-.saveActions button:disabled {
+.saveActions > button:disabled {
   cursor: not-allowed;
   opacity: 0.52;
 }
@@ -483,7 +483,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .saveActions button:not(:disabled):hover {
+  .saveActions > button:not(:disabled):hover {
     background: #485640;
   }
 
@@ -570,7 +570,7 @@
     gap: 7px;
   }
 
-  .saveActions button {
+  .saveActions > button {
     min-width: 65px;
     padding-inline: 12px;
   }
@@ -642,7 +642,7 @@
 
   .editorLayout,
   .referencePanel,
-  .saveActions button,
+  .saveActions > button,
   .successModal a {
     transition: none;
   }

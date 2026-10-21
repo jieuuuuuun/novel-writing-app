@@ -195,7 +195,7 @@
   margin-left: auto;
 }
 
-.topbarActions button {
+.topbarActions > button {
   position: relative;
   width: 32px;
   height: 32px;
@@ -205,7 +205,7 @@
   font-size: 22px;
 }
 
-.topbarActions button i {
+.topbarActions > button i {
   position: absolute;
   top: 4px;
   right: 2px;
@@ -1010,7 +1010,7 @@
 }
 
 @media (max-width: 560px) {
-  .topbarActions button {
+  .topbarActions > button {
     display: none;
   }
 
