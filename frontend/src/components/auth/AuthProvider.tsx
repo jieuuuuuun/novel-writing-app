@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { usePathname } from "next/navigation";
 import { defaultLocale, getMessages } from "@/i18n/messages";
 import {
   AUTH_UNAUTHORIZED_EVENT,
@@ -23,6 +24,7 @@ type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 interface AuthContextValue {
   user: AuthUser | null;
   authenticated: boolean;
+  status: AuthStatus;
   logout: () => Promise<void>;
 }
 
@@ -42,6 +44,9 @@ export default function AuthProvider({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const copy = getMessages(defaultLocale);
+  const pathname = usePathname();
+  const isAppRoute =
+    pathname === "/works" || pathname.startsWith("/works/");
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [hasCheckError, setHasCheckError] = useState(false);
@@ -49,18 +54,23 @@ export default function AuthProvider({
   useEffect(() => {
     const controller = new AbortController();
 
-    getCurrentUser(controller.signal)
-      .then((currentUser) => {
-        setUser(currentUser);
-        setStatus(currentUser ? "authenticated" : "unauthenticated");
-        setHasCheckError(false);
-      })
-      .catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === "AbortError")) {
-          setStatus("unauthenticated");
-          setHasCheckError(true);
-        }
-      });
+    const applyUser = (currentUser: AuthUser | null) => {
+      setUser(currentUser);
+      setStatus(currentUser ? "authenticated" : "unauthenticated");
+      setHasCheckError(false);
+    };
+
+    const syncCurrentUser = (signal?: AbortSignal) =>
+      getCurrentUser(signal)
+        .then(applyUser)
+        .catch((error: unknown) => {
+          if (!(error instanceof DOMException && error.name === "AbortError")) {
+            setStatus("unauthenticated");
+            setHasCheckError(true);
+          }
+        });
+
+    void syncCurrentUser(controller.signal);
 
     const handleUnauthorized = () => {
       setUser(null);
@@ -68,7 +78,15 @@ export default function AuthProvider({
       setHasCheckError(false);
     };
 
+    // 뒤로가기로 bfcache에서 복원되면 마운트 effect가 다시 돌지 않으므로 세션을 재확인합니다.
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        void syncCurrentUser();
+      }
+    };
+
     window.addEventListener(AUTH_UNAUTHORIZED_EVENT, handleUnauthorized);
+    window.addEventListener("pageshow", handlePageShow);
 
     return () => {
       controller.abort();
@@ -76,6 +94,7 @@ export default function AuthProvider({
         AUTH_UNAUTHORIZED_EVENT,
         handleUnauthorized,
       );
+      window.removeEventListener("pageshow", handlePageShow);
     };
   }, []);
 
@@ -104,14 +123,16 @@ export default function AuthProvider({
     () => ({
       user,
       authenticated: status === "authenticated",
+      status,
       logout,
     }),
     [logout, status, user],
   );
 
-  let content: React.ReactNode;
+  let content: React.ReactNode = children;
 
-  if (status === "loading") {
+  // 공개 랜딩은 로그인 여부와 관계없이 보여주고, 앱 경로만 인증으로 가립니다.
+  if (isAppRoute && status === "loading") {
     content = (
       <main className={styles.authScreen} aria-live="polite">
         <span
@@ -120,7 +141,7 @@ export default function AuthProvider({
         />
       </main>
     );
-  } else if (!user) {
+  } else if (isAppRoute && !user) {
     content = (
       <LoginScreen
         brand={copy.brand}
@@ -129,8 +150,6 @@ export default function AuthProvider({
         onRetry={() => void retryAuthentication()}
       />
     );
-  } else {
-    content = children;
   }
 
   return (

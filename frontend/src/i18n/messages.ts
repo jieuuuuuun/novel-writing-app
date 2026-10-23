@@ -32,6 +32,60 @@ const messages = {
       loggingOut: "로그아웃 중...",
       logoutError: "로그아웃하지 못했습니다. 다시 시도해 주세요.",
     },
+    landing: {
+      metaTitle: "글린 | 당신의 이야기가 머무는 곳",
+      metaDescription: "작품을 만들고 회차별로 이어서 쓰는 웹소설 창작 공간",
+      navFeatures: "기능",
+      navAbout: "이야기가 시작되는 곳",
+      navFaq: "자주 묻는 질문",
+      openMenu: "메뉴 열기",
+      closeMenu: "메뉴 닫기",
+      startWithGoogle: "Google로 시작하기",
+      goToWorks: "내 작품으로 가기",
+      eyebrow: "당신의 이야기가 머무는 곳",
+      title: "쓰고, 이어가고,\n당신의 이야기를 쌓아보세요.",
+      description:
+        "글린은 작가의 아이디어가 작품이 될 때까지,\n차분한 집중의 시간을 함께하는 웹 소설 창작 플랫폼입니다.",
+      note: "별도의 회원가입 없이, Google 계정으로 바로 시작할 수 있습니다.",
+      previewLabel: "글린 작품 목록 미리보기",
+      featuresTitle: "지금 사용할 수 있는 기능",
+      features: [
+        {
+          title: "작품을 체계적으로",
+          description:
+            "아이디어부터 완성까지, 하나의 공간에서 작품을 관리할 수 있습니다.",
+        },
+        {
+          title: "몰입하는 글쓰기",
+          description: "회차별로 이야기를 작성하고 이어서 작업할 수 있습니다.",
+        },
+        {
+          title: "자동 저장",
+          description:
+            "작성 중인 내용이 자동으로 저장되어, 안심하고 이야기에 집중할 수 있습니다.",
+        },
+      ],
+      aboutTitle: "이야기가 시작되는 곳",
+      aboutDescription:
+        "글린은 웹소설을 쓰고 관리하기 위한 창작 공간입니다. 작품을 만들고, 회차를 작성하고, 저장한 이야기를 다시 열어 이어갈 수 있습니다.",
+      faqTitle: "자주 묻는 질문",
+      faq: [
+        {
+          question: "어떻게 시작하나요?",
+          answer: "Google 계정으로 로그인하면 바로 작품을 만들 수 있습니다.",
+        },
+        {
+          question: "별도의 회원가입이 필요한가요?",
+          answer: "아니요. Google 계정만 있으면 시작할 수 있습니다.",
+        },
+        {
+          question: "지금 무엇을 할 수 있나요?",
+          answer:
+            "작품을 만들고 회차를 작성, 수정, 삭제하며 내 이야기만 따로 관리할 수 있습니다.",
+        },
+      ],
+      bottomTitle: "당신의 이야기를, 글린에서 시작해보세요.",
+    },
     dashboard: {
       eyebrow: "MY WRITING ROOM",
       title: "나의 작품",
@@ -251,6 +305,62 @@ const messages = {
       logout: "Log out",
       loggingOut: "Logging out...",
       logoutError: "We couldn't log you out. Please try again.",
+    },
+    landing: {
+      metaTitle: "Glean | A place where your stories stay",
+      metaDescription:
+        "A writing space for creating works and continuing stories episode by episode",
+      navFeatures: "Features",
+      navAbout: "Where stories begin",
+      navFaq: "FAQ",
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
+      startWithGoogle: "Start with Google",
+      goToWorks: "Go to my works",
+      eyebrow: "A place where your stories stay",
+      title: "Write, continue,\nand gather your story.",
+      description:
+        "Glean is a web novel writing platform that stays with you\nfrom the first idea to a finished work.",
+      note: "No extra sign-up. Start right away with your Google account.",
+      previewLabel: "Glean works preview",
+      featuresTitle: "What you can do now",
+      features: [
+        {
+          title: "Keep works organized",
+          description:
+            "Manage your stories in one place, from the first idea to a finished work.",
+        },
+        {
+          title: "Write with focus",
+          description:
+            "Write each episode and continue the story whenever you return.",
+        },
+        {
+          title: "Autosave",
+          description:
+            "Your draft is saved automatically, so you can stay focused on the story.",
+        },
+      ],
+      aboutTitle: "Where stories begin",
+      aboutDescription:
+        "Glean is a writing space for web novels. Create a work, write episodes, save them, and open them again when you are ready to continue.",
+      faqTitle: "FAQ",
+      faq: [
+        {
+          question: "How do I start?",
+          answer: "Sign in with Google and you can create a work right away.",
+        },
+        {
+          question: "Do I need a separate account?",
+          answer: "No. A Google account is enough to begin.",
+        },
+        {
+          question: "What can I do now?",
+          answer:
+            "You can create works and write, edit, or delete episodes that belong only to you.",
+        },
+      ],
+      bottomTitle: "Begin your story in Glean.",
     },
     dashboard: {
       eyebrow: "MY WRITING ROOM",

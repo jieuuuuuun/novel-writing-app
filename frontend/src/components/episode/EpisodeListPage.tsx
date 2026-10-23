@@ -139,7 +139,7 @@ export default function EpisodeListPage({ workId }: EpisodeListPageProps) {
             <span />
           </button>
 
-          <Link href="/" className={workspaceStyles.mobileBrand}>
+          <Link href="/works" className={workspaceStyles.mobileBrand}>
             {copy.brand.name}
             <i aria-hidden="true" />
           </Link>
@@ -209,7 +209,7 @@ export default function EpisodeListPage({ workId }: EpisodeListPageProps) {
                 {copy.workspace.states.retry}
               </button>
             ) : null}
-            <Link href="/">{copy.workspace.backToWorks}</Link>
+            <Link href="/works">{copy.workspace.backToWorks}</Link>
           </main>
         ) : (
           <main className={styles.episodesPage}>

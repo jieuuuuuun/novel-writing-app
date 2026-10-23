@@ -48,7 +48,7 @@ export default function WorkspaceSidebar({
         ) : null}
       </div>
 
-      <Link className={styles.backLink} href="/" onClick={onClose}>
+      <Link className={styles.backLink} href="/works" onClick={onClose}>
         <span aria-hidden="true">←</span>
         {copy.backToWorks}
       </Link>

@@ -62,7 +62,8 @@ export class AuthController {
       maxAge: this.authService.getAccessTokenMaxAge(),
       path: '/',
     });
-    response.redirect(requireEnvironment('FRONTEND_URL'));
+    const frontendUrl = requireEnvironment('FRONTEND_URL').replace(/\/$/, '');
+    response.redirect(`${frontendUrl}/works`);
   }
 
   @Get('me')

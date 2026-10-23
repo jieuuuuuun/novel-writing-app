@@ -145,7 +145,7 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
             <span />
           </button>
 
-          <Link href="/" className={styles.mobileBrand}>
+          <Link href="/works" className={styles.mobileBrand}>
             {copy.brand.name}
             <i aria-hidden="true" />
           </Link>
@@ -214,13 +214,13 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
                 {copy.workspace.states.retry}
               </button>
             ) : null}
-            <Link href="/">{copy.workspace.backToWorks}</Link>
+            <Link href="/works">{copy.workspace.backToWorks}</Link>
           </main>
         ) : (
           <main className={styles.workspaceMain}>
             <header className={styles.workHeading}>
               <div>
-                <Link href="/">{copy.workspace.backToWorks}</Link>
+                <Link href="/works">{copy.workspace.backToWorks}</Link>
                 <h1>{work.title}</h1>
                 <div className={styles.workHeadingMeta}>
                   <p>{work.subtitle || copy.workspace.noSubtitle}</p>

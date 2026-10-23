@@ -351,7 +351,7 @@ export default function EpisodeEditorPage({
               {copy.workspace.states.retry}
             </button>
           ) : null}
-          <Link href="/">{copy.workspace.backToWorks}</Link>
+          <Link href="/works">{copy.workspace.backToWorks}</Link>
         </main>
       ) : (
         <main
