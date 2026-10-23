@@ -7,6 +7,8 @@
 }
 
 .detailHeader {
+  position: relative;
+  z-index: 50;
   min-height: 64px;
   display: flex;
   align-items: center;
@@ -16,6 +18,13 @@
   border-bottom: 1px solid var(--line);
   background: rgba(249, 247, 241, 0.92);
   backdrop-filter: blur(12px);
+}
+
+.detailActions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
 }
 
 .detailHeader > div {

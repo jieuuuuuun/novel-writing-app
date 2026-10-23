@@ -99,6 +99,7 @@
 
 .userMenu {
   position: relative;
+  z-index: 60;
   flex: 0 0 auto;
 }
 
@@ -150,7 +151,7 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  z-index: 100;
+  z-index: 70;
   width: min(260px, calc(100vw - 28px));
   overflow: hidden;
   border: 1px solid var(--line-strong);

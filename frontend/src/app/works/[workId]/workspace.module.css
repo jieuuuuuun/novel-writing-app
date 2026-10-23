@@ -173,6 +173,8 @@
 }
 
 .workspaceTopbar {
+  position: relative;
+  z-index: 50;
   height: 64px;
   display: flex;
   align-items: center;
@@ -923,7 +925,7 @@
   .workspaceTopbar {
     position: sticky;
     top: 0;
-    z-index: 25;
+    z-index: 50;
     height: auto;
     min-height: 62px;
     flex-wrap: wrap;

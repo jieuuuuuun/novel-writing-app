@@ -7,6 +7,7 @@ import {
   getMessages,
   type Locale,
 } from "@/i18n/messages";
+import UserMenu from "@/components/auth/UserMenu";
 import { getEpisode } from "@/lib/episode-api";
 import { getWork } from "@/lib/work-api";
 import type { Episode } from "@/types/episode";
@@ -123,12 +124,15 @@ export default function EpisodeDetailPage({
           </Link>
           <strong>{work.title}</strong>
         </div>
-        <Link
-          className={styles.editButton}
-          href={`/works/${work.id}/episodes/${episode.id}/edit`}
-        >
-          {copy.workspace.episodeDetail.edit}
-        </Link>
+        <div className={styles.detailActions}>
+          <Link
+            className={styles.editButton}
+            href={`/works/${work.id}/episodes/${episode.id}/edit`}
+          >
+            {copy.workspace.episodeDetail.edit}
+          </Link>
+          <UserMenu />
+        </div>
       </header>
 
       <main className={styles.detailMain}>

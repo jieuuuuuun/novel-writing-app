@@ -200,6 +200,8 @@
 }
 
 .topbar {
+  position: relative;
+  z-index: 50;
   height: 66px;
   display: flex;
   align-items: center;
@@ -1110,7 +1112,7 @@
   .topbar {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 50;
     height: auto;
     min-height: 64px;
     flex-wrap: wrap;

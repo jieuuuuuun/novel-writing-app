@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { defaultLocale, getMessages } from "@/i18n/messages";
 import {
   AUTH_UNAUTHORIZED_EVENT,
@@ -45,11 +45,13 @@ export default function AuthProvider({
 }: Readonly<{ children: React.ReactNode }>) {
   const copy = getMessages(defaultLocale);
   const pathname = usePathname();
+  const router = useRouter();
   const isAppRoute =
     pathname === "/works" || pathname.startsWith("/works/");
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [hasCheckError, setHasCheckError] = useState(false);
+  const [hasLoggedOut, setHasLoggedOut] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -114,10 +116,12 @@ export default function AuthProvider({
 
   const logout = useCallback(async () => {
     await requestLogout();
+    setHasLoggedOut(true);
     setUser(null);
     setStatus("unauthenticated");
     setHasCheckError(false);
-  }, []);
+    router.replace("/");
+  }, [router]);
 
   const contextValue = useMemo<AuthContextValue>(
     () => ({
@@ -129,10 +133,24 @@ export default function AuthProvider({
     [logout, status, user],
   );
 
+  if (hasLoggedOut && !isAppRoute) {
+    setHasLoggedOut(false);
+  }
+
   let content: React.ReactNode = children;
 
   // 공개 랜딩은 로그인 여부와 관계없이 보여주고, 앱 경로만 인증으로 가립니다.
-  if (isAppRoute && status === "loading") {
+  // 로그아웃 직후에는 LoginScreen 대신 랜딩으로 이동합니다.
+  if (hasLoggedOut && isAppRoute) {
+    content = (
+      <main className={styles.authScreen} aria-live="polite">
+        <span
+          className={styles.loadingMark}
+          aria-label={copy.auth.checking}
+        />
+      </main>
+    );
+  } else if (isAppRoute && status === "loading") {
     content = (
       <main className={styles.authScreen} aria-live="polite">
         <span
