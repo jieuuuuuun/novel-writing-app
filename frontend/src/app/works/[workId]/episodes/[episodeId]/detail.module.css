@@ -34,7 +34,7 @@
   gap: 16px;
 }
 
-.detailHeader > div > a {
+.detailHeader > div:not(.detailActions) > a {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -198,6 +198,7 @@
 @media (hover: hover) and (pointer: fine) {
   .editButton:hover,
   .detailStatus a:hover {
+    color: #fffdf8;
     background: #485640;
     transform: translateY(-1px);
   }
