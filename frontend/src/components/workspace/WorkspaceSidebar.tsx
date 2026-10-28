@@ -6,7 +6,7 @@ interface WorkspaceSidebarProps {
   copy: Messages["workspace"];
   brand: Messages["brand"];
   workId: number;
-  activeMenu?: "home" | "episodes";
+  activeMenu?: "home" | "planning" | "characters" | "episodes";
   isMobile?: boolean;
   onClose?: () => void;
 }
@@ -55,11 +55,19 @@ export default function WorkspaceSidebar({
 
       <nav aria-label={copy.navigation[activeMenu]}>
         {navigation.map(([key, item], index) => {
-          const isAvailable = key === "home" || key === "episodes";
+          const isAvailable =
+            key === "home" ||
+            key === "planning" ||
+            key === "characters" ||
+            key === "episodes";
           const href =
-            key === "episodes"
-              ? `/works/${workId}/episodes`
-              : `/works/${workId}`;
+            key === "planning"
+              ? `/works/${workId}/planning`
+              : key === "characters"
+                ? `/works/${workId}/characters`
+                : key === "episodes"
+                  ? `/works/${workId}/episodes`
+                  : `/works/${workId}`;
 
           return isAvailable ? (
             <Link

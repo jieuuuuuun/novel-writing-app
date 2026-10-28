@@ -28,8 +28,10 @@ model Work {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  episodes Episode[]
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  episodes   Episode[]
+  planning   WorkPlanning?
+  characters Character[]
 
   @@map("work")
 }
@@ -46,4 +48,61 @@ model Episode {
   work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
 
   @@map("episode")
+}
+
+model Character {
+  id         Int      @id @default(autoincrement())
+  workId     Int      @map("work_id")
+  name       String   @db.VarChar(100)
+  role       String?  @db.VarChar(100)
+  age        String?  @db.VarChar(50)
+  occupation String?  @db.VarChar(100)
+  summary    String?  @db.VarChar(300)
+  goal       String?  @db.Text
+  trauma     String?  @db.Text
+  weakness   String?  @db.Text
+  lack       String?  @db.Text
+  quote      String?  @db.Text
+  sortOrder  Int      @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+
+  @@index([workId, sortOrder])
+  @@map("character")
+}
+
+model WorkPlanning {
+  id             Int      @id @default(autoincrement())
+  workId         Int      @unique @map("work_id")
+  genre          String?  @db.VarChar(100)
+  subgenre       String?  @db.VarChar(100)
+  targetAudience String?  @map("target_audience") @db.VarChar(200)
+  keywords       String?  @db.VarChar(500)
+  logline        String?  @db.Text
+  introduction   String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  work         Work                       @relation(fields: [workId], references: [id], onDelete: Cascade)
+  customFields WorkPlanningCustomField[]
+
+  @@map("work_planning")
+}
+
+model WorkPlanningCustomField {
+  id         Int      @id @default(autoincrement())
+  planningId Int      @map("planning_id")
+  label      String   @db.VarChar(100)
+  value      String   @db.Text
+  sortOrder  Int      @map("sort_order")
+  valueType  String   @default("text") @map("value_type") @db.VarChar(20)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  planning WorkPlanning @relation(fields: [planningId], references: [id], onDelete: Cascade)
+
+  @@index([planningId, sortOrder])
+  @@map("work_planning_custom_field")
 }

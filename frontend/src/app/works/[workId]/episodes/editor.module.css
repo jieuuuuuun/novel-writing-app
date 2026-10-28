@@ -280,6 +280,9 @@
 
 .referencePanel {
   min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -319,13 +322,26 @@
   border-bottom: 0;
 }
 
+.referenceContent,
+.referenceContentHidden {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.referenceContentHidden {
+  display: none;
+}
+
 .referenceContent nav {
   display: flex;
   overflow-x: auto;
   border-bottom: 1px solid var(--line);
 }
 
-.referenceContent nav button {
+.referenceTab,
+.referenceTabActive {
   min-height: 43px;
   flex: 0 0 auto;
   padding: 0 10px;
@@ -336,25 +352,194 @@
   font-size: 9px;
 }
 
-.referenceContent nav button:disabled {
-  opacity: 0.66;
+.referenceTabActive {
+  color: #3f473c;
+  font-weight: 700;
+  box-shadow: inset 0 -2px 0 #66735d;
 }
 
-.referenceContent > div {
-  min-height: 250px;
+.referenceTab:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.referenceTab:focus-visible,
+.referenceTabActive:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: -2px;
+}
+
+.referenceBody {
+  min-height: 0;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 12px 14px 16px;
+}
+
+.referenceStatus,
+.referenceEmpty {
+  min-height: 180px;
   display: grid;
   place-content: center;
   gap: 8px;
-  color: #99958a;
+  color: #8d8a80;
   text-align: center;
 }
 
-.referenceContent > div > span {
-  font-size: 24px;
+.referenceStatus,
+.referenceEmpty p {
+  font-size: 11px;
+  line-height: 1.6;
 }
 
-.referenceContent > div p {
+.referenceEmpty strong {
+  color: #4d5548;
+  font-family: var(--font-serif);
+  font-size: 13px;
+}
+
+.referenceEmpty button,
+.referenceEmpty a {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px auto 0;
+  padding: 0 12px;
+  border: 1px solid #58654f;
+  border-radius: 6px;
+  color: #fffdf8;
+  background: #58654f;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.referenceEmpty button {
+  cursor: pointer;
+}
+
+.referenceCharacterList {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.referenceCharacterList button {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  padding: 10px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.referenceCharacterList button:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 2px;
+}
+
+.referenceCharacterList strong {
+  overflow-wrap: anywhere;
+  color: #343934;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.referenceCharacterList span {
+  color: var(--olive);
   font-size: 10px;
+  font-weight: 700;
+}
+
+.referenceCharacterList small {
+  color: #7a776e;
+  font-size: 10px;
+}
+
+.referenceCharacterList p {
+  overflow: hidden;
+  color: #5d615a;
+  font-size: 11px;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.referenceDetail {
+  display: grid;
+  gap: 12px;
+}
+
+.referenceBack {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  color: #566052;
+  background: transparent;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.referenceBack:focus-visible,
+.referenceEditLink:focus-visible,
+.referenceEmpty a:focus-visible,
+.referenceEmpty button:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 2px;
+}
+
+.referenceDetail h3 {
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.referenceDetail dl {
+  display: grid;
+  gap: 12px;
+}
+
+.referenceDetail dt {
+  color: #6d7268;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.referenceDetail dd {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #3d433c;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.referenceEditLink {
+  width: fit-content;
+  margin-top: 4px;
+  color: #566052;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .editorStatus {
@@ -493,6 +678,20 @@
 
   .successModal a + a:hover {
     background: rgba(88, 101, 79, 0.08);
+  }
+
+  .referenceCharacterList button:hover {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .referenceEmpty a:hover,
+  .referenceEmpty button:hover {
+    background: #485640;
+  }
+
+  .referenceBack:hover,
+  .referenceEditLink:hover {
+    color: #3d4739;
   }
 }
 

@@ -4,10 +4,19 @@ import { AppService } from './app.service.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { WorkModule } from './work/work.module.js';
 import { EpisodeModule } from './episode/episode.module.js';
+import { PlanningModule } from './planning/planning.module.js';
+import { CharacterModule } from './character/character.module.js';
 import { AuthModule } from './auth/auth.module.js';
 
 @Module({
-  imports: [PrismaModule, WorkModule, EpisodeModule, AuthModule],
+  imports: [
+    PrismaModule,
+    WorkModule,
+    EpisodeModule,
+    PlanningModule,
+    CharacterModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

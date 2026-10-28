@@ -284,7 +284,10 @@ export default function WorkWorkspace({ workId }: WorkWorkspaceProps) {
                 </dl>
               </section>
 
-              <WorkspaceQuickLinks copy={copy.workspace} />
+              <WorkspaceQuickLinks
+                copy={copy.workspace}
+                workId={work.id}
+              />
               <RecentEpisodes
                 copy={copy.workspace}
                 episodes={episodes}

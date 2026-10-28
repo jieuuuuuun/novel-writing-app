@@ -719,7 +719,7 @@
   padding: 12px;
 }
 
-.quickLinks button {
+.quickLinkCard {
   position: relative;
   min-width: 0;
   min-height: 84px;
@@ -734,28 +734,35 @@
   background: #eef0e7;
   font: inherit;
   text-align: left;
-  transition: transform 160ms ease;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
-.quickLinks button:nth-child(2) {
+a.quickLinkCard {
+  cursor: pointer;
+}
+
+.quickLinks > div > :nth-child(2) {
   background: #f3ecdd;
 }
 
-.quickLinks button:nth-child(3) {
+.quickLinks > div > :nth-child(3) {
   background: #e9ece8;
 }
 
-.quickLinks button:nth-child(4) {
+.quickLinks > div > :nth-child(4) {
   background: #f3e7e0;
 }
 
-.quickLinks button > span:first-child {
+.quickLinkCard > span:first-child {
   color: var(--olive);
   font-size: 21px;
   text-align: center;
 }
 
-.quickLinks button > span:nth-child(2) {
+.quickLinkCard > span:nth-child(2) {
   min-width: 0;
 }
 
@@ -774,13 +781,22 @@
   line-height: 1.45;
 }
 
-.quickLinks button i {
+.quickLinkCard i {
   position: absolute;
   top: 7px;
   right: 8px;
   color: #8d8e85;
   font-size: 8px;
   font-style: normal;
+}
+
+.quickLinkCard:disabled {
+  cursor: default;
+}
+
+a.quickLinkCard:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 2px;
 }
 
 .workspaceStatus {
@@ -888,6 +904,11 @@
 
   .recentEpisodes li:hover {
     background: rgba(255, 255, 255, 0.5);
+  }
+
+  a.quickLinkCard:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(64, 57, 44, 0.08);
   }
 }
 
@@ -1103,7 +1124,7 @@
     grid-template-columns: 1fr;
   }
 
-  .quickLinks button {
+  .quickLinkCard {
     min-height: 76px;
   }
 
@@ -1133,7 +1154,8 @@
   .workOverview,
   .recentEpisodes,
   .quickLinks,
-  .heroActions a {
+  .heroActions a,
+  .quickLinkCard {
     transition: none;
   }
 

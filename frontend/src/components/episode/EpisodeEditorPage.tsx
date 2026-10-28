@@ -446,6 +446,8 @@ export default function EpisodeEditorPage({
 
           <EditorReferencePanel
             copy={copy.workspace.episodeEditor}
+            fieldCopy={copy.workspace.characterSheet}
+            workId={numericWorkId}
             isOpen={isReferenceOpen}
             onToggle={() => setIsReferenceOpen((current) => !current)}
           />
