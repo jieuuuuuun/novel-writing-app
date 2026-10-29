@@ -28,10 +28,11 @@ model Work {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  episodes   Episode[]
-  planning   WorkPlanning?
-  characters Character[]
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  episodes           Episode[]
+  planning           WorkPlanning?
+  characters         Character[]
+  characterRelations CharacterRelation[]
 
   @@map("work")
 }
@@ -68,9 +69,36 @@ model Character {
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+  relationsAsA CharacterRelation[] @relation("CharacterRelationA")
+  relationsAsB CharacterRelation[] @relation("CharacterRelationB")
 
   @@index([workId, sortOrder])
   @@map("character")
+}
+
+model CharacterRelation {
+  id           Int      @id @default(autoincrement())
+  workId       Int      @map("work_id")
+  characterAId Int      @map("character_a_id")
+  characterBId Int      @map("character_b_id")
+  type         String?  @db.VarChar(50)
+  summary      String?  @db.VarChar(300)
+  aToBLabel    String?  @map("a_to_b_label") @db.VarChar(50)
+  aToBNote     String?  @map("a_to_b_note") @db.Text
+  bToALabel    String?  @map("b_to_a_label") @db.VarChar(50)
+  bToANote     String?  @map("b_to_a_note") @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  work       Work      @relation(fields: [workId], references: [id], onDelete: Cascade)
+  characterA Character @relation("CharacterRelationA", fields: [characterAId], references: [id], onDelete: Cascade)
+  characterB Character @relation("CharacterRelationB", fields: [characterBId], references: [id], onDelete: Cascade)
+
+  @@unique([workId, characterAId, characterBId])
+  @@index([workId])
+  @@index([characterAId])
+  @@index([characterBId])
+  @@map("character_relation")
 }
 
 model WorkPlanning {

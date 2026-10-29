@@ -1,0 +1,363 @@
+.relationsPage {
+  width: min(820px, 100%);
+  margin: 0 auto;
+  padding: 27px clamp(24px, 4vw, 56px) 70px;
+  animation: pageEnter 280ms ease-out both;
+}
+
+.pageHeader {
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pageHeader > div {
+  min-width: 0;
+}
+
+.pageHeader > div > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 15px;
+  color: #566052;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pageHeader h1 {
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.2vw, 38px);
+  font-weight: 650;
+  line-height: 1.18;
+  letter-spacing: -0.05em;
+}
+
+.pageHeader p {
+  margin-top: 8px;
+  max-width: 36rem;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.newRelationButton,
+.addCharacterButton {
+  min-height: 42px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 19px;
+  border: 1px solid #58654f;
+  border-radius: 6px;
+  color: #fffdf8;
+  background: #58654f;
+  box-shadow: 0 6px 15px rgba(66, 75, 59, 0.14);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+a.newRelationButton:visited,
+a.addCharacterButton:visited {
+  color: #fffdf8;
+}
+
+.newRelationButton > span,
+.addCharacterButton > span {
+  color: inherit;
+  font-size: 17px;
+  font-weight: 350;
+}
+
+a.newRelationButton:focus-visible,
+a.addCharacterButton:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 3px;
+}
+
+button.newRelationButton:disabled {
+  cursor: default;
+  color: #ece8dc;
+  background: #8b8e84;
+  border-color: #8b8e84;
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+.listSection {
+  margin-top: 22px;
+}
+
+.listToolbar {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.listToolbar h2 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.listToolbar span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.relationList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.relationRow {
+  min-width: 0;
+  display: block;
+  padding: 22px 8px 20px;
+  margin-inline: -8px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 6px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+a.relationRow:visited {
+  color: inherit;
+}
+
+.relationRow:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 2px;
+}
+
+.pair {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.person {
+  min-width: 0;
+}
+
+.person strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.person span {
+  display: block;
+  margin-top: 4px;
+  color: var(--olive);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pair > .person:last-child {
+  text-align: right;
+}
+
+.connector {
+  min-width: 92px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7a7d73;
+}
+
+.line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #c4c7b8;
+}
+
+.connectorLabel {
+  flex: 0 0 auto;
+  max-width: 8rem;
+  overflow-wrap: anywhere;
+  color: var(--olive);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.summary {
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+  color: #5d615a;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.direction {
+  min-width: 0;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.directionNames {
+  overflow-wrap: anywhere;
+  color: #6d7268;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.direction strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #3d433c;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.directionNote {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #5d615a;
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.emptyState {
+  min-height: 310px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 45px 24px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.emptyState > span {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--olive);
+  background: rgba(255, 255, 255, 0.48);
+  font-size: 19px;
+}
+
+.emptyState h2 {
+  margin-top: 13px;
+  color: #3d433c;
+  font-family: var(--font-serif);
+  font-size: 17px;
+}
+
+.emptyState p {
+  margin-top: 6px;
+  max-width: 22rem;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.emptyState .newRelationButton,
+.emptyState .addCharacterButton {
+  margin-top: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.newRelationButton:hover,
+  a.addCharacterButton:hover {
+    background: #485640;
+    transform: translateY(-1px);
+  }
+
+  a.relationRow:hover {
+    background: rgba(255, 255, 255, 0.55);
+  }
+}
+
+@media (max-width: 780px) {
+  .relationsPage {
+    padding: 25px 20px 54px;
+  }
+}
+
+@media (max-width: 620px) {
+  .relationsPage {
+    padding: 20px 16px 52px;
+  }
+
+  .pageHeader {
+    display: block;
+  }
+
+  .newRelationButton,
+  .addCharacterButton {
+    width: fit-content;
+    min-height: 39px;
+    margin-top: 15px;
+  }
+
+  .pair {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .pair > .person:last-child {
+    text-align: left;
+  }
+
+  .connector {
+    min-width: 0;
+    justify-content: flex-start;
+    padding-left: 2px;
+  }
+
+  .line {
+    max-width: 28px;
+    flex: 0 0 28px;
+  }
+
+  .person strong {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .relationsPage {
+    animation: none;
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

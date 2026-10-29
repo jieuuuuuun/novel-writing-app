@@ -6,6 +6,7 @@ import { WorkModule } from './work/work.module.js';
 import { EpisodeModule } from './episode/episode.module.js';
 import { PlanningModule } from './planning/planning.module.js';
 import { CharacterModule } from './character/character.module.js';
+import { RelationModule } from './relation/relation.module.js';
 import { AuthModule } from './auth/auth.module.js';
 
 @Module({
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module.js';
     EpisodeModule,
     PlanningModule,
     CharacterModule,
+    RelationModule,
     AuthModule,
   ],
   controllers: [AppController],
