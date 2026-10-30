@@ -58,6 +58,120 @@
   letter-spacing: -0.03em;
 }
 
+.foldHeader {
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.foldHeader h2 {
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.foldHeader span {
+  flex: 0 0 auto;
+  color: #7a7d73;
+  font-size: 13px;
+}
+
+.foldHeader:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 3px;
+}
+
+.foldBody {
+  display: grid;
+  gap: 24px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 28px;
+}
+
+.customDescription {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.customEmpty {
+  color: #9a978c;
+  font-size: 13px;
+}
+
+.customList {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.customItem {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.customItem .field textarea {
+  min-height: 72px;
+}
+
+.customActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.customActions > button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  color: #62675e;
+  background: transparent;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.customActions > button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.addFieldButton {
+  width: fit-content;
+  min-height: 38px;
+  padding: 0 2px;
+  border: 0;
+  color: #566052;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .section + .section {
   padding-top: 8px;
   border-top: 1px solid var(--line);
@@ -209,6 +323,15 @@
   .dangerZone > button:not(:disabled):hover {
     color: #734c47;
   }
+
+  .customActions > button:not(:disabled):hover {
+    border-color: #a9ad9f;
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .addFieldButton:hover {
+    color: #3d4739;
+  }
 }
 
 @media (max-width: 780px) {
@@ -227,6 +350,10 @@
     font-size: 16px;
   }
 
+  .fieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .saveBar {
     justify-content: stretch;
   }
@@ -243,6 +370,11 @@
   .dangerZone > button {
     min-height: 40px;
   }
+
+  .customActions > button {
+    min-height: 40px;
+    padding-inline: 14px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -251,7 +383,9 @@
   }
 
   .saveBar > button,
-  .dangerZone > button {
+  .dangerZone > button,
+  .customActions > button,
+  .addFieldButton {
     transition: none;
   }
 }

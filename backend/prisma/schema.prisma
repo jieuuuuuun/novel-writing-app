@@ -68,12 +68,56 @@ model Character {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  work Work @relation(fields: [workId], references: [id], onDelete: Cascade)
-  relationsAsA CharacterRelation[] @relation("CharacterRelationA")
-  relationsAsB CharacterRelation[] @relation("CharacterRelationB")
+  work         Work                    @relation(fields: [workId], references: [id], onDelete: Cascade)
+  profile      CharacterProfile?
+  customFields CharacterCustomField[]
+  relationsAsA CharacterRelation[]     @relation("CharacterRelationA")
+  relationsAsB CharacterRelation[]     @relation("CharacterRelationB")
 
   @@index([workId, sortOrder])
   @@map("character")
+}
+
+model CharacterProfile {
+  id              Int      @id @default(autoincrement())
+  characterId     Int      @unique @map("character_id")
+  height          String?  @db.VarChar(100)
+  bodyType        String?  @map("body_type") @db.VarChar(100)
+  hair            String?  @db.VarChar(200)
+  eyes            String?  @db.VarChar(200)
+  skin            String?  @db.VarChar(100)
+  fashion         String?  @db.VarChar(200)
+  feature         String?  @db.VarChar(200)
+  appearanceNote  String?  @map("appearance_note") @db.Text
+  personality     String?  @db.Text
+  likes           String?  @db.Text
+  dislikes        String?  @db.Text
+  secret          String?  @db.Text
+  habits          String?  @db.Text
+  speechMannerism String?  @map("speech_mannerism") @db.Text
+  signature       String?  @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@map("character_profile")
+}
+
+model CharacterCustomField {
+  id          Int      @id @default(autoincrement())
+  characterId Int      @map("character_id")
+  label       String   @db.VarChar(100)
+  value       String   @db.Text
+  sortOrder   Int      @map("sort_order")
+  valueType   String   @default("text") @map("value_type") @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@index([characterId, sortOrder])
+  @@map("character_custom_field")
 }
 
 model CharacterRelation {

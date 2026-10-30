@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import UserMenu from "@/components/auth/UserMenu";
 import WorkSearch from "@/components/work/WorkSearch";
 import WorkspaceSidebar from "@/components/workspace/WorkspaceSidebar";
@@ -17,9 +17,14 @@ import { getWork, getWorks } from "@/lib/work-api";
 import {
   CHARACTER_FIELD_LIMITS,
   emptyCharacterForm,
-  type Character,
+  emptyCharacterProfile,
+  type CharacterCustomField,
+  type CharacterCustomFieldDraft,
+  type CharacterDetail,
   type CharacterFormState,
+  type CharacterProfile,
   type CreateCharacterInput,
+  type UpdateCharacterInput,
 } from "@/types/character";
 import type { Work } from "@/types/work";
 import CharacterForm from "./CharacterForm";
@@ -35,7 +40,61 @@ interface CharacterSheetPageProps {
 type CharacterSheetCopy = Messages["workspace"]["characterSheet"];
 type CharacterFieldErrors = Partial<Record<keyof CharacterFormState, string>>;
 
-function toCharacterFormState(character: Character): CharacterFormState {
+function toProfileState(
+  profile?: Partial<CharacterProfile> | null,
+): CharacterProfile {
+  return {
+    ...emptyCharacterProfile,
+    ...profile,
+  };
+}
+
+function normalizeCustomFields(
+  fields: CharacterCustomFieldDraft[],
+): CharacterCustomFieldDraft[] {
+  return fields.map((field, index) => ({
+    ...field,
+    sortOrder: index,
+  }));
+}
+
+function toDraftCustomFields(
+  fields: CharacterCustomField[],
+): CharacterCustomFieldDraft[] {
+  return normalizeCustomFields(
+    [...fields]
+      .sort(
+        (left, right) =>
+          left.sortOrder - right.sortOrder || left.id - right.id,
+      )
+      .map((field) => ({
+        clientKey: `saved-${field.id}`,
+        id: field.id,
+        label: field.label,
+        value: field.value,
+        sortOrder: field.sortOrder,
+      })),
+  );
+}
+
+function areCustomFieldsEqual(
+  current: CharacterCustomFieldDraft[],
+  saved: CharacterCustomFieldDraft[],
+) {
+  if (current.length !== saved.length) return false;
+
+  return current.every((field, index) => {
+    const other = saved[index];
+    return (
+      field.id === other.id &&
+      field.label === other.label &&
+      field.value === other.value &&
+      field.sortOrder === other.sortOrder
+    );
+  });
+}
+
+function toCharacterFormState(character: CharacterDetail): CharacterFormState {
   return {
     name: character.name,
     role: character.role,
@@ -47,6 +106,8 @@ function toCharacterFormState(character: Character): CharacterFormState {
     weakness: character.weakness,
     lack: character.lack,
     quote: character.quote,
+    profile: toProfileState(character.profile),
+    customFields: toDraftCustomFields(character.customFields ?? []),
   };
 }
 
@@ -54,12 +115,23 @@ function isSameCharacterForm(
   left: CharacterFormState,
   right: CharacterFormState,
 ) {
+  const baseFields = Object.keys(emptyCharacterForm).filter(
+    (field) => field !== "profile" && field !== "customFields",
+  ) as Array<Exclude<keyof CharacterFormState, "profile" | "customFields">>;
+  const profileFields = Object.keys(emptyCharacterProfile) as Array<
+    keyof CharacterProfile
+  >;
+
   return (
-    Object.keys(emptyCharacterForm) as Array<keyof CharacterFormState>
-  ).every((field) => left[field] === right[field]);
+    baseFields.every((field) => left[field] === right[field]) &&
+    profileFields.every(
+      (field) => left.profile[field] === right.profile[field],
+    ) &&
+    areCustomFieldsEqual(left.customFields, right.customFields)
+  );
 }
 
-function toCharacterPayload(form: CharacterFormState): CreateCharacterInput {
+function toCreatePayload(form: CharacterFormState): CreateCharacterInput {
   return {
     name: form.name.trim(),
     role: form.role.trim(),
@@ -71,6 +143,38 @@ function toCharacterPayload(form: CharacterFormState): CreateCharacterInput {
     weakness: form.weakness,
     lack: form.lack,
     quote: form.quote,
+  };
+}
+
+function toUpdatePayload(form: CharacterFormState): UpdateCharacterInput {
+  const profile = form.profile;
+  const customFields = normalizeCustomFields(form.customFields);
+
+  return {
+    ...toCreatePayload(form),
+    profile: {
+      height: profile.height.trim(),
+      bodyType: profile.bodyType.trim(),
+      hair: profile.hair.trim(),
+      eyes: profile.eyes.trim(),
+      skin: profile.skin.trim(),
+      fashion: profile.fashion.trim(),
+      feature: profile.feature.trim(),
+      appearanceNote: profile.appearanceNote,
+      personality: profile.personality,
+      likes: profile.likes,
+      dislikes: profile.dislikes,
+      secret: profile.secret,
+      habits: profile.habits,
+      speechMannerism: profile.speechMannerism,
+      signature: profile.signature,
+    },
+    customFields: customFields.map((field) => ({
+      ...(field.id != null ? { id: field.id } : {}),
+      label: field.label.trim(),
+      value: field.value,
+      sortOrder: field.sortOrder,
+    })),
   };
 }
 
@@ -124,9 +228,10 @@ export default function CharacterSheetPage({
   const isEdit = mode === "edit";
   const listHref = `/works/${numericWorkId}/characters`;
   const sheetCopy = copy.workspace.characterSheet;
+  const nextFieldKey = useRef(0);
 
   const [work, setWork] = useState<Work | null>(null);
-  const [character, setCharacter] = useState<Character | null>(null);
+  const [character, setCharacter] = useState<CharacterDetail | null>(null);
   const [allWorks, setAllWorks] = useState<Work[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [form, setForm] = useState<CharacterFormState>(emptyCharacterForm);
@@ -141,16 +246,18 @@ export default function CharacterSheetPage({
   const [isDeleting, setIsDeleting] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [labelErrors, setLabelErrors] = useState<string[]>([]);
 
   const isDirty = !isSameCharacterForm(form, savedForm);
   const hasSheetData = work !== null && (!isEdit || character !== null);
 
-  const applyCharacter = (nextCharacter: Character) => {
+  const applyCharacter = (nextCharacter: CharacterDetail) => {
     const nextForm = toCharacterFormState(nextCharacter);
     setCharacter(nextCharacter);
     setForm(nextForm);
     setSavedForm(nextForm);
     setFieldErrors({});
+    setLabelErrors([]);
   };
 
   const loadPage = async () => {
@@ -169,7 +276,7 @@ export default function CharacterSheetPage({
       if (isEdit && characterData) {
         applyCharacter(characterData);
       } else {
-        setCharacter(characterData);
+        setCharacter(null);
       }
       setLoadError(false);
     } catch {
@@ -197,7 +304,7 @@ export default function CharacterSheetPage({
         if (isEdit && characterData) {
           applyCharacter(characterData);
         } else {
-          setCharacter(characterData);
+          setCharacter(null);
         }
         setLoadError(false);
       })
@@ -220,7 +327,7 @@ export default function CharacterSheetPage({
     : copy.workspace.states.notFound;
 
   const handleFieldChange = (
-    field: keyof CharacterFormState,
+    field: Exclude<keyof CharacterFormState, "profile" | "customFields">,
     value: string,
   ) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -230,6 +337,94 @@ export default function CharacterSheetPage({
       delete next[field];
       return next;
     });
+    setSaveError("");
+  };
+
+  const handleProfileChange = (
+    field: keyof CharacterProfile,
+    value: string,
+  ) => {
+    setForm((current) => ({
+      ...current,
+      profile: {
+        ...current.profile,
+        [field]: value,
+      },
+    }));
+    setSaveError("");
+  };
+
+  const handleCustomFieldChange = (
+    clientKey: string,
+    field: "label" | "value",
+    value: string,
+  ) => {
+    setForm((current) => ({
+      ...current,
+      customFields: current.customFields.map((item) =>
+        item.clientKey === clientKey ? { ...item, [field]: value } : item,
+      ),
+    }));
+    setSaveError("");
+    if (field === "label") {
+      setLabelErrors((current) =>
+        current.filter((key) => key !== clientKey),
+      );
+    }
+  };
+
+  const handleAddCustomField = () => {
+    nextFieldKey.current += 1;
+    setForm((current) => ({
+      ...current,
+      customFields: normalizeCustomFields([
+        ...current.customFields,
+        {
+          clientKey: `new-${nextFieldKey.current}`,
+          label: "",
+          value: "",
+          sortOrder: current.customFields.length,
+        },
+      ]),
+    }));
+    setSaveError("");
+  };
+
+  const handleMoveCustomField = (index: number, direction: -1 | 1) => {
+    setForm((current) => {
+      const target = index + direction;
+      if (target < 0 || target >= current.customFields.length) {
+        return current;
+      }
+
+      const next = [...current.customFields];
+      const [moved] = next.splice(index, 1);
+      next.splice(target, 0, moved);
+
+      return {
+        ...current,
+        customFields: normalizeCustomFields(next),
+      };
+    });
+    setSaveError("");
+  };
+
+  const handleDeleteCustomField = (clientKey: string) => {
+    const target = form.customFields.find(
+      (field) => field.clientKey === clientKey,
+    );
+    if (!target) return;
+    if (target.id != null && !window.confirm(sheetCopy.deleteCustomConfirm)) {
+      return;
+    }
+
+    setForm((current) => ({
+      ...current,
+      customFields: normalizeCustomFields(
+        current.customFields.filter((field) => field.clientKey !== clientKey),
+      ),
+    }));
+    setLabelErrors((current) => current.filter((key) => key !== clientKey));
     setSaveError("");
   };
 
@@ -244,27 +439,41 @@ export default function CharacterSheetPage({
       return;
     }
 
+    const blankLabels = form.customFields
+      .filter((field) => !field.label.trim())
+      .map((field) => field.clientKey);
+
+    if (blankLabels.length > 0) {
+      setLabelErrors(blankLabels);
+      return;
+    }
+
     setIsSaving(true);
     setSaveError("");
-
-    const payload = toCharacterPayload(form);
 
     try {
       if (isEdit) {
         const updatedCharacter = await updateCharacter(
           numericWorkId,
           numericCharacterId,
-          payload,
+          toUpdatePayload(form),
         );
         applyCharacter(updatedCharacter);
         setIsSaving(false);
         return;
       }
 
-      await createCharacter(numericWorkId, payload);
+      await createCharacter(numericWorkId, toCreatePayload(form));
       router.replace(listHref);
-    } catch {
-      setSaveError(isEdit ? sheetCopy.updateError : sheetCopy.saveError);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "";
+      setSaveError(
+        isEdit && message.includes("Invalid custom field")
+          ? sheetCopy.customFieldInvalid
+          : isEdit
+            ? sheetCopy.updateError
+            : sheetCopy.saveError,
+      );
       setIsSaving(false);
     }
   };
@@ -420,7 +629,15 @@ export default function CharacterSheetPage({
                     ? sheetCopy.submitEdit
                     : sheetCopy.submitCreate
               }
+              showProfile={isEdit}
+              showCustomFields={isEdit}
+              labelErrors={labelErrors}
               onChange={handleFieldChange}
+              onProfileChange={handleProfileChange}
+              onCustomFieldChange={handleCustomFieldChange}
+              onAddCustomField={handleAddCustomField}
+              onMoveCustomField={handleMoveCustomField}
+              onDeleteCustomField={handleDeleteCustomField}
               onSubmit={(event) => void handleSubmit(event)}
             />
 

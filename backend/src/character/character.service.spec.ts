@@ -4,10 +4,31 @@ import { CharacterService } from './character.service.js';
 
 const createdAt = new Date('2026-01-01');
 const updatedAt = new Date('2026-01-02');
+const emptyProfile = {
+  height: '',
+  bodyType: '',
+  hair: '',
+  eyes: '',
+  skin: '',
+  fashion: '',
+  feature: '',
+  appearanceNote: '',
+  personality: '',
+  likes: '',
+  dislikes: '',
+  secret: '',
+  habits: '',
+  speechMannerism: '',
+  signature: '',
+};
+const detailInclude = {
+  profile: true,
+  customFields: {
+    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+  },
+};
 
-function characterRecord(
-  overrides: Record<string, unknown> = {},
-) {
+function characterRecord(overrides: Record<string, unknown> = {}) {
   return {
     id: 21,
     workId: 4,
@@ -28,6 +49,14 @@ function characterRecord(
   };
 }
 
+function detailRecord(overrides: Record<string, unknown> = {}) {
+  return characterRecord({
+    profile: null,
+    customFields: [],
+    ...overrides,
+  });
+}
+
 describe('CharacterService', () => {
   let service: CharacterService;
   let prisma: {
@@ -37,10 +66,21 @@ describe('CharacterService', () => {
     character: {
       findMany: ReturnType<typeof vi.fn>;
       findFirst: ReturnType<typeof vi.fn>;
+      findFirstOrThrow: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
       delete: ReturnType<typeof vi.fn>;
       aggregate: ReturnType<typeof vi.fn>;
+    };
+    characterProfile: {
+      upsert: ReturnType<typeof vi.fn>;
+      create: ReturnType<typeof vi.fn>;
+    };
+    characterCustomField: {
+      findMany: ReturnType<typeof vi.fn>;
+      create: ReturnType<typeof vi.fn>;
+      update: ReturnType<typeof vi.fn>;
+      deleteMany: ReturnType<typeof vi.fn>;
     };
     $transaction: ReturnType<typeof vi.fn>;
   };
@@ -53,10 +93,21 @@ describe('CharacterService', () => {
       character: {
         findMany: vi.fn(),
         findFirst: vi.fn(),
+        findFirstOrThrow: vi.fn(),
         create: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
         aggregate: vi.fn(),
+      },
+      characterProfile: {
+        upsert: vi.fn(),
+        create: vi.fn(),
+      },
+      characterCustomField: {
+        findMany: vi.fn(),
+        create: vi.fn(),
+        update: vi.fn(),
+        deleteMany: vi.fn(),
       },
       $transaction: vi.fn(),
     };
@@ -76,6 +127,20 @@ describe('CharacterService', () => {
       where: { workId: 4 },
       orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
     });
+  });
+
+  it('keeps the list payload without profile or customFields', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findMany.mockResolvedValue([characterRecord()]);
+
+    const [result] = await service.findAll(4, 2);
+
+    expect(prisma.character.findMany.mock.calls[0][0]).not.toHaveProperty(
+      'include',
+    );
+    expect(result).not.toHaveProperty('profile');
+    expect(result).not.toHaveProperty('customFields');
+    expect(result.quote).toBe('이번엔 놓치지 않겠어.');
   });
 
   it('creates a character with only a name and sortOrder 0', async () => {
@@ -115,8 +180,11 @@ describe('CharacterService', () => {
         sortOrder: 0,
       },
     });
+    expect(prisma.characterProfile.upsert).not.toHaveBeenCalled();
+    expect(prisma.characterCustomField.create).not.toHaveBeenCalled();
     expect(result.name).toBe('서윤');
     expect(result.sortOrder).toBe(0);
+    expect(result).not.toHaveProperty('profile');
   });
 
   it('creates a character with every field and increments sortOrder', async () => {
@@ -157,9 +225,9 @@ describe('CharacterService', () => {
     });
   });
 
-  it('returns a character detail after ownership checks', async () => {
+  it('returns a character detail with an empty profile when none exists', async () => {
     prisma.work.findFirst.mockResolvedValue({ id: 4 });
-    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.findFirst.mockResolvedValue(detailRecord());
 
     const result = await service.findOne(4, 21, 2);
 
@@ -168,9 +236,58 @@ describe('CharacterService', () => {
         id: 21,
         workId: 4,
       },
+      include: detailInclude,
     });
+    expect(prisma.characterProfile.create).not.toHaveBeenCalled();
+    expect(prisma.characterProfile.upsert).not.toHaveBeenCalled();
     expect(result.id).toBe(21);
     expect(result.role).toBe('주인공');
+    expect(result.profile).toEqual(emptyProfile);
+    expect(result.customFields).toEqual([]);
+  });
+
+  it('returns stored profile and custom fields on detail GET', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(
+      detailRecord({
+        profile: {
+          height: '168',
+          bodyType: '슬림',
+          hair: '흑발',
+          eyes: '갈색',
+          skin: '',
+          fashion: '',
+          feature: '',
+          appearanceNote: '왼손목 팔찌',
+          personality: '차분하다',
+          likes: '커피',
+          dislikes: '',
+          secret: '',
+          habits: '',
+          speechMannerism: '',
+          signature: '팔찌',
+        },
+        customFields: [
+          {
+            id: 8,
+            characterId: 21,
+            label: 'MBTI',
+            value: 'INFJ',
+            sortOrder: 0,
+            valueType: 'text',
+            createdAt,
+            updatedAt,
+          },
+        ],
+      }),
+    );
+
+    const result = await service.findOne(4, 21, 2);
+
+    expect(result.profile.height).toBe('168');
+    expect(result.profile.signature).toBe('팔찌');
+    expect(result.customFields).toHaveLength(1);
+    expect(result.customFields[0].label).toBe('MBTI');
   });
 
   it('updates a character without changing sortOrder or workId', async () => {
@@ -179,8 +296,11 @@ describe('CharacterService', () => {
     prisma.character.update.mockResolvedValue(
       characterRecord({ name: '서윤 수정', role: '여주' }),
     );
+    prisma.character.findFirstOrThrow.mockResolvedValue(
+      detailRecord({ name: '서윤 수정', role: '여주' }),
+    );
 
-    await service.update(4, 21, 2, {
+    const result = await service.update(4, 21, 2, {
       name: '서윤 수정',
       role: '여주',
     });
@@ -200,9 +320,208 @@ describe('CharacterService', () => {
         quote: '',
       },
     });
+    expect(prisma.characterProfile.upsert).not.toHaveBeenCalled();
+    expect(prisma.characterCustomField.findMany).not.toHaveBeenCalled();
+    expect(result.profile).toEqual(emptyProfile);
   });
 
-  it('deletes a character after ownership verification', async () => {
+  it('creates a profile on the first PATCH and updates it later', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.character.findFirstOrThrow.mockResolvedValue(
+      detailRecord({
+        profile: {
+          ...emptyProfile,
+          height: '168',
+          personality: '차분하다',
+        },
+      }),
+    );
+
+    await service.update(4, 21, 2, {
+      name: '서윤',
+      profile: {
+        height: ' 168 ',
+        personality: '차분하다',
+      },
+    });
+
+    expect(prisma.characterProfile.upsert).toHaveBeenCalledWith({
+      where: { characterId: 21 },
+      create: {
+        characterId: 21,
+        ...emptyProfile,
+        height: '168',
+        personality: '차분하다',
+      },
+      update: {
+        ...emptyProfile,
+        height: '168',
+        personality: '차분하다',
+      },
+    });
+  });
+
+  it('creates a custom field without using client valueType', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.characterCustomField.findMany.mockResolvedValue([]);
+    prisma.character.findFirstOrThrow.mockResolvedValue(detailRecord());
+
+    await service.update(4, 21, 2, {
+      name: '서윤',
+      customFields: [
+        {
+          label: ' MBTI ',
+          value: 'INFJ',
+          sortOrder: 0,
+          valueType: 'date',
+        } as never,
+      ],
+    });
+
+    expect(prisma.characterCustomField.create).toHaveBeenCalledWith({
+      data: {
+        characterId: 21,
+        label: 'MBTI',
+        value: 'INFJ',
+        sortOrder: 0,
+        valueType: 'text',
+      },
+    });
+  });
+
+  it('updates owned custom fields and reorders them', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.characterCustomField.findMany.mockResolvedValue([
+      { id: 8, characterId: 21 },
+      { id: 9, characterId: 21 },
+    ]);
+    prisma.character.findFirstOrThrow.mockResolvedValue(detailRecord());
+
+    await service.update(4, 21, 2, {
+      name: '서윤',
+      customFields: [
+        { id: 9, label: '종족', value: '인간', sortOrder: 0 },
+        { id: 8, label: 'MBTI', value: 'INFJ', sortOrder: 1 },
+      ],
+    });
+
+    expect(prisma.characterCustomField.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: {
+        label: '종족',
+        value: '인간',
+        sortOrder: 0,
+      },
+    });
+    expect(prisma.characterCustomField.update).toHaveBeenCalledWith({
+      where: { id: 8 },
+      data: {
+        label: 'MBTI',
+        value: 'INFJ',
+        sortOrder: 1,
+      },
+    });
+    expect(prisma.characterCustomField.deleteMany).not.toHaveBeenCalled();
+  });
+
+  it('deletes custom fields omitted from the request array', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.characterCustomField.findMany.mockResolvedValue([
+      { id: 8, characterId: 21 },
+      { id: 9, characterId: 21 },
+    ]);
+    prisma.character.findFirstOrThrow.mockResolvedValue(detailRecord());
+
+    await service.update(4, 21, 2, {
+      name: '서윤',
+      customFields: [{ id: 8, label: 'MBTI', value: '', sortOrder: 0 }],
+    });
+
+    expect(prisma.characterCustomField.deleteMany).toHaveBeenCalledWith({
+      where: {
+        characterId: 21,
+        id: { in: [9] },
+      },
+    });
+  });
+
+  it('rejects another character custom field id', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.characterCustomField.findMany.mockResolvedValue([
+      { id: 8, characterId: 21 },
+    ]);
+
+    await expect(
+      service.update(4, 21, 2, {
+        name: '서윤',
+        customFields: [
+          { id: 99, label: '훔친 필드', value: 'x', sortOrder: 0 },
+        ],
+      }),
+    ).rejects.toMatchObject({
+      message: 'Invalid custom field.',
+    });
+    expect(prisma.characterCustomField.update).not.toHaveBeenCalled();
+  });
+
+  it('rejects duplicate custom field ids', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+    prisma.character.update.mockResolvedValue(characterRecord());
+    prisma.characterCustomField.findMany.mockResolvedValue([
+      { id: 8, characterId: 21 },
+    ]);
+
+    await expect(
+      service.update(4, 21, 2, {
+        name: '서윤',
+        customFields: [
+          { id: 8, label: 'A', value: '1', sortOrder: 0 },
+          { id: 8, label: 'B', value: '2', sortOrder: 1 },
+        ],
+      }),
+    ).rejects.toMatchObject({
+      message: 'Invalid custom field.',
+    });
+  });
+
+  it('rejects a blank custom field label', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+
+    await expect(
+      service.update(4, 21, 2, {
+        name: '서윤',
+        customFields: [{ label: '   ', value: 'x', sortOrder: 0 }],
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects a profile short field longer than its limit', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.character.findFirst.mockResolvedValue(characterRecord());
+
+    await expect(
+      service.update(4, 21, 2, {
+        name: '서윤',
+        profile: { height: '가'.repeat(101) },
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  it('deletes a character after ownership verification without extra child deletes', async () => {
     prisma.work.findFirst.mockResolvedValue({ id: 4 });
     prisma.character.findFirst.mockResolvedValue(characterRecord());
     prisma.character.delete.mockResolvedValue(characterRecord());
@@ -212,6 +531,7 @@ describe('CharacterService', () => {
     expect(prisma.character.delete).toHaveBeenCalledWith({
       where: { id: 21 },
     });
+    expect(prisma.characterCustomField.deleteMany).not.toHaveBeenCalled();
   });
 
   it('rejects a blank name on create', async () => {
@@ -273,6 +593,7 @@ describe('CharacterService', () => {
         id: 99,
         workId: 4,
       },
+      include: detailInclude,
     });
   });
 
@@ -280,9 +601,9 @@ describe('CharacterService', () => {
     prisma.work.findFirst.mockResolvedValue({ id: 4 });
     prisma.character.findFirst.mockResolvedValue(null);
 
-    await expect(service.update(4, 8, 2, { name: '서윤' })).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(
+      service.update(4, 8, 2, { name: '서윤' }),
+    ).rejects.toBeInstanceOf(NotFoundException);
     expect(prisma.character.update).not.toHaveBeenCalled();
   });
 });

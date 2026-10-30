@@ -1,6 +1,7 @@
 import { notifyUnauthorized } from "@/lib/auth-api";
 import type {
   Character,
+  CharacterDetail,
   CreateCharacterInput,
   UpdateCharacterInput,
 } from "@/types/character";
@@ -73,7 +74,7 @@ export async function getCharacter(
   workId: number,
   characterId: number,
   signal?: AbortSignal,
-): Promise<Character | null> {
+): Promise<CharacterDetail | null> {
   const response = await fetch(CHARACTER_API_PATH(workId, characterId), {
     method: "GET",
     cache: "no-store",
@@ -88,14 +89,14 @@ export async function getCharacter(
     throw new Error(await readCharacterError(response));
   }
 
-  return (await response.json()) as Character;
+  return (await response.json()) as CharacterDetail;
 }
 
 export async function updateCharacter(
   workId: number,
   characterId: number,
   payload: UpdateCharacterInput,
-): Promise<Character> {
+): Promise<CharacterDetail> {
   const response = await fetch(CHARACTER_API_PATH(workId, characterId), {
     method: "PATCH",
     headers: {
@@ -108,7 +109,7 @@ export async function updateCharacter(
     throw new Error(await readCharacterError(response));
   }
 
-  return (await response.json()) as Character;
+  return (await response.json()) as CharacterDetail;
 }
 
 export async function deleteCharacter(
