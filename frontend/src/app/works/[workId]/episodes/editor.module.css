@@ -478,6 +478,64 @@
   white-space: nowrap;
 }
 
+.referenceCharacterList .referenceRelationPair {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 6px;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.referenceRelationPair strong {
+  overflow-wrap: anywhere;
+}
+
+.referenceRelationPair span {
+  overflow-wrap: anywhere;
+  color: var(--olive);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.referenceCharacterList p.referenceRelationSummary {
+  overflow: visible;
+  overflow-wrap: anywhere;
+  text-overflow: unset;
+  white-space: normal;
+}
+
+.referenceDirection {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.referenceDirection p {
+  overflow-wrap: anywhere;
+  color: #6d7268;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.referenceDirection strong {
+  overflow-wrap: anywhere;
+  color: #3d433c;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.referenceDirection p.referenceDirectionNote {
+  overflow-wrap: anywhere;
+  color: #3d433c;
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
 .referenceDetail {
   display: grid;
   gap: 12px;
@@ -512,6 +570,14 @@
   font-size: 18px;
   font-weight: 650;
   letter-spacing: -0.03em;
+}
+
+.referenceDetail > p {
+  overflow-wrap: anywhere;
+  color: #3d433c;
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
 }
 
 .referenceDetail dl {

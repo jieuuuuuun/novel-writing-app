@@ -7,7 +7,7 @@ interface WorkspaceQuickLinksProps {
   workId: number;
 }
 
-const quickLinkIcons = ["♙", "□", "◇", "☷"] as const;
+const quickLinkIcons = ["♙", "⌘", "□", "◇", "☷"] as const;
 
 export default function WorkspaceQuickLinks({
   copy,
@@ -20,21 +20,30 @@ export default function WorkspaceQuickLinks({
       ...copy.quickLinks.characters,
     },
     {
-      key: "synopsis",
+      key: "relationships",
       icon: quickLinkIcons[1],
+      ...copy.quickLinks.relationships,
+    },
+    {
+      key: "synopsis",
+      icon: quickLinkIcons[2],
       ...copy.quickLinks.synopsis,
     },
     {
       key: "world",
-      icon: quickLinkIcons[2],
+      icon: quickLinkIcons[3],
       ...copy.quickLinks.world,
     },
     {
       key: "episodes",
-      icon: quickLinkIcons[3],
+      icon: quickLinkIcons[4],
       ...copy.quickLinks.episodes,
     },
   ];
+  const hrefByKey: Record<string, string> = {
+    characters: `/works/${workId}/characters`,
+    relationships: `/works/${workId}/relations`,
+  };
 
   return (
     <section className={styles.quickLinks}>
@@ -56,10 +65,12 @@ export default function WorkspaceQuickLinks({
             </>
           );
 
-          return link.key === "characters" ? (
+          const href = hrefByKey[link.key];
+
+          return href ? (
             <Link
               className={styles.quickLinkCard}
-              href={`/works/${workId}/characters`}
+              href={href}
               key={link.key}
             >
               {content}

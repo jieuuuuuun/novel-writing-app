@@ -459,6 +459,18 @@ const messages = {
           backToList: "등장인물 목록",
           editInSheet: "등장인물 설정에서 수정하기",
         },
+        referenceRelations: {
+          loading: "관계를 불러오는 중...",
+          emptyNoCharacters: "관계를 만들려면 먼저 등장인물을 추가해주세요.",
+          emptyOneCharacter: "한 명 더 추가하면 관계를 만들 수 있어요.",
+          empty: "아직 등록된 관계가 없습니다.",
+          addCharacter: "등장인물 추가하기",
+          addRelation: "관계 추가하기",
+          loadError: "관계를 불러오지 못했습니다.",
+          retry: "다시 시도",
+          backToList: "관계 목록",
+          editInSheet: "관계 설정에서 수정하기",
+        },
       },
       quickLinks: {
         title: "바로가기",
@@ -466,6 +478,10 @@ const messages = {
         characters: {
           title: "등장인물",
           description: "작품의 인물 설정을 관리합니다.",
+        },
+        relationships: {
+          title: "관계도",
+          description: "등장인물 사이의 관계를 정리합니다.",
         },
         synopsis: {
           title: "시놉시스",
@@ -949,6 +965,18 @@ const messages = {
           backToList: "Character list",
           editInSheet: "Edit in character notes",
         },
+        referenceRelations: {
+          loading: "Loading relationships...",
+          emptyNoCharacters: "Add characters first to create a relationship.",
+          emptyOneCharacter: "Add one more character to create a relationship.",
+          empty: "No relationships yet.",
+          addCharacter: "Add a character",
+          addRelation: "Add a relationship",
+          loadError: "We couldn't load the relationships.",
+          retry: "Try again",
+          backToList: "Relationship list",
+          editInSheet: "Edit in relationship notes",
+        },
       },
       quickLinks: {
         title: "Quick links",
@@ -956,6 +984,10 @@ const messages = {
         characters: {
           title: "Characters",
           description: "Manage the characters in your story.",
+        },
+        relationships: {
+          title: "Relationships",
+          description: "Keep track of how characters relate.",
         },
         synopsis: {
           title: "Synopsis",

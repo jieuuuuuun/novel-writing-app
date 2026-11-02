@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { Messages } from "@/i18n/messages";
 import ReferenceCharacters from "./ReferenceCharacters";
+import ReferenceRelations from "./ReferenceRelations";
 import styles from "@/app/works/[workId]/episodes/editor.module.css";
 
 interface EditorReferencePanelProps {
@@ -12,7 +14,12 @@ interface EditorReferencePanelProps {
   onToggle: () => void;
 }
 
-const availableReferences = new Set(["characters"]);
+type ReferenceKey = keyof Messages["workspace"]["episodeEditor"]["references"];
+
+const availableReferences = new Set<ReferenceKey>([
+  "characters",
+  "relationships",
+]);
 
 export default function EditorReferencePanel({
   copy,
@@ -22,8 +29,9 @@ export default function EditorReferencePanel({
   onToggle,
 }: EditorReferencePanelProps) {
   const references = Object.entries(copy.references) as Array<
-    [keyof typeof copy.references, string]
+    [ReferenceKey, string]
   >;
+  const [activeTab, setActiveTab] = useState<ReferenceKey>("characters");
 
   return (
     <aside
@@ -51,7 +59,7 @@ export default function EditorReferencePanel({
         <nav aria-label={copy.referenceTitle}>
           {references.map(([key, label]) => {
             const isAvailable = availableReferences.has(key);
-            const isActive = key === "characters";
+            const isActive = key === activeTab;
 
             return isAvailable ? (
               <button
@@ -61,6 +69,7 @@ export default function EditorReferencePanel({
                 type="button"
                 aria-current={isActive ? "page" : undefined}
                 key={key}
+                onClick={() => setActiveTab(key)}
               >
                 {label}
               </button>
@@ -78,12 +87,33 @@ export default function EditorReferencePanel({
           })}
         </nav>
         <div className={styles.referenceBody}>
-          <ReferenceCharacters
-            key={workId}
-            workId={workId}
-            copy={copy.referenceCharacters}
-            fieldCopy={fieldCopy}
-          />
+          <div
+            className={
+              activeTab === "characters"
+                ? undefined
+                : styles.referenceContentHidden
+            }
+          >
+            <ReferenceCharacters
+              key={workId}
+              workId={workId}
+              copy={copy.referenceCharacters}
+              fieldCopy={fieldCopy}
+            />
+          </div>
+          <div
+            className={
+              activeTab === "relationships"
+                ? undefined
+                : styles.referenceContentHidden
+            }
+          >
+            <ReferenceRelations
+              key={workId}
+              workId={workId}
+              copy={copy.referenceRelations}
+            />
+          </div>
         </div>
       </div>
     </aside>

@@ -756,6 +756,10 @@ a.quickLinkCard {
   background: #f3e7e0;
 }
 
+.quickLinks > div > :nth-child(5) {
+  background: #ece8df;
+}
+
 .quickLinkCard > span:first-child {
   color: var(--olive);
   font-size: 21px;
