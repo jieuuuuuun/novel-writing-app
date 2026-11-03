@@ -1,6 +1,6 @@
-# Glean Backend
+# ArcNote Backend
 
-글린의 작품과 회차 데이터를 관리하는 REST API 서버입니다.
+아크노트의 작품과 회차 데이터를 관리하는 REST API 서버입니다.
 
 ## Tech Stack
 

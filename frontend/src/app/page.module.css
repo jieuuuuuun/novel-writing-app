@@ -45,7 +45,7 @@
 
 .brandName,
 .mobileBrand > span:first-child {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 7px;
   font-family: var(--font-serif);
@@ -54,6 +54,7 @@
   line-height: 1;
   letter-spacing: -0.08em;
   color: #263127;
+  white-space: nowrap;
 }
 
 .brand p {
@@ -67,32 +68,39 @@
 
 .leafMark {
   position: relative;
-  width: 18px;
-  height: 24px;
+  width: 14px;
+  height: 18px;
   flex: 0 0 auto;
-  transform: rotate(21deg);
+  box-sizing: border-box;
+  border: 1.5px solid var(--olive);
+  border-radius: 1px 6px 1.5px 1.5px;
 }
 
 .leafMark::before,
 .leafMark::after {
   content: "";
   position: absolute;
-  width: 9px;
-  height: 16px;
-  border-radius: 100% 0 100% 0;
-  background: var(--olive);
+  background: transparent;
 }
 
 .leafMark::before {
-  top: 0;
-  left: 7px;
+  top: 4px;
+  left: 2px;
+  right: 2px;
+  height: 5px;
+  border-top: 1.5px solid var(--olive);
+  border-radius: 100% 100% 0 0;
+  opacity: 0.8;
 }
 
 .leafMark::after {
-  top: 8px;
-  left: 1px;
-  transform: rotate(-72deg);
-  opacity: 0.72;
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  border-left: 1.4px solid var(--olive);
+  border-bottom: 1.4px solid var(--olive);
+  opacity: 0.9;
 }
 
 .sidebarNav {
@@ -212,6 +220,10 @@
   backdrop-filter: blur(12px);
 }
 
+.topbar > :not(.mobileMenuBackdrop) {
+  align-self: center;
+}
+
 .mobileBrand {
   display: none;
 }
@@ -292,10 +304,14 @@
 
 .notificationButton {
   position: relative;
-  width: 33px;
-  height: 33px;
+  width: 37px;
+  height: 37px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #31372f;
   font-size: 23px;
+  line-height: 1;
 }
 
 .notificationButton i {
@@ -347,11 +363,17 @@
 }
 
 .pageHeading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 28px;
+  display: grid;
+  gap: 8px;
   margin-bottom: 19px;
+}
+
+.pageHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
 }
 
 .eyebrow,
@@ -365,6 +387,7 @@
 }
 
 .pageHeading h1 {
+  min-width: 0;
   font-family: var(--font-serif);
   font-size: clamp(27px, 3vw, 36px);
   font-weight: 650;
@@ -373,9 +396,12 @@
 }
 
 .pageHeading p {
-  margin-top: 5px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.pageHeading .newWorkButton {
+  flex: 0 0 auto;
 }
 
 .newWorkButton,
@@ -1139,8 +1165,9 @@
   }
 
   .mobileBrand {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    white-space: nowrap;
   }
 
   .mobileBrand > span:first-child {
@@ -1148,7 +1175,7 @@
   }
 
   .mobileBrand .leafMark {
-    transform: scale(0.76) rotate(21deg);
+    transform: scale(0.82);
   }
 
   .searchBox {
@@ -1251,7 +1278,6 @@
   }
 
   .pageHeading {
-    align-items: center;
     margin-bottom: 17px;
   }
 

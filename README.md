@@ -1,4 +1,4 @@
-# 🌿 글린 (Glean)
+# 아크노트 (ArcNote)
 
 > 웹소설의 아이디어 구상부터 작품 관리, 회차별 집필까지 이어지는 창작 워크스페이스
 
@@ -12,13 +12,13 @@
 
 ## 🖼 Preview
 
-![글린 작품 목록](./docs/images/work-list.png)
+![아크노트 작품 목록](./docs/images/work-list.png)
 
 ---
 
 ## 🔗 Demo
 
-🌐 **[글린 바로가기](https://novel-writing-app-olive.vercel.app)**
+🌐 **[아크노트 바로가기](https://novel-writing-app-olive.vercel.app)**
 
 > 현재는 로그인 기능 구현 전 단계로 Demo User를 사용하는 MVP 버전입니다.
 
@@ -64,7 +64,7 @@
 - 작품 삭제 시 연결된 회차 Cascade 삭제
 
 <p align="center">
-  <img src="./docs/images/mobile.png" alt="글린 모바일 반응형 화면" width="320" />
+  <img src="./docs/images/mobile.png" alt="아크노트 모바일 반응형 화면" width="320" />
 </p>
 
 ---

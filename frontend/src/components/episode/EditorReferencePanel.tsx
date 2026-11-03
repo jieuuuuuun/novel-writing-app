@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Messages } from "@/i18n/messages";
 import ReferenceCharacters from "./ReferenceCharacters";
 import ReferenceRelations from "./ReferenceRelations";
+import ReferenceWorld from "./ReferenceWorld";
 import styles from "@/app/works/[workId]/episodes/editor.module.css";
 
 interface EditorReferencePanelProps {
@@ -19,6 +20,7 @@ type ReferenceKey = keyof Messages["workspace"]["episodeEditor"]["references"];
 const availableReferences = new Set<ReferenceKey>([
   "characters",
   "relationships",
+  "world",
 ]);
 
 export default function EditorReferencePanel({
@@ -112,6 +114,17 @@ export default function EditorReferencePanel({
               key={workId}
               workId={workId}
               copy={copy.referenceRelations}
+            />
+          </div>
+          <div
+            className={
+              activeTab === "world" ? undefined : styles.referenceContentHidden
+            }
+          >
+            <ReferenceWorld
+              key={workId}
+              workId={workId}
+              copy={copy.referenceWorld}
             />
           </div>
         </div>

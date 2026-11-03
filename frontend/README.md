@@ -1,6 +1,6 @@
-# Glean Frontend
+# ArcNote Frontend
 
-글린의 작품·회차 관리 UI와 글쓰기 워크스페이스를 제공하는 Frontend입니다.
+아크노트의 작품·회차 관리 UI와 글쓰기 워크스페이스를 제공하는 Frontend입니다.
 
 ## Tech Stack
 

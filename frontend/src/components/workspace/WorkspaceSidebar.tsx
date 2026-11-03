@@ -6,7 +6,13 @@ interface WorkspaceSidebarProps {
   copy: Messages["workspace"];
   brand: Messages["brand"];
   workId: number;
-  activeMenu?: "home" | "planning" | "characters" | "relationships" | "episodes";
+  activeMenu?:
+    | "home"
+    | "planning"
+    | "characters"
+    | "relationships"
+    | "world"
+    | "episodes";
   isMobile?: boolean;
   onClose?: () => void;
 }
@@ -60,6 +66,7 @@ export default function WorkspaceSidebar({
             key === "planning" ||
             key === "characters" ||
             key === "relationships" ||
+            key === "world" ||
             key === "episodes";
           const href =
             key === "planning"
@@ -68,9 +75,11 @@ export default function WorkspaceSidebar({
                 ? `/works/${workId}/characters`
                 : key === "relationships"
                   ? `/works/${workId}/relations`
-                  : key === "episodes"
-                    ? `/works/${workId}/episodes`
-                    : `/works/${workId}`;
+                  : key === "world"
+                    ? `/works/${workId}/world`
+                    : key === "episodes"
+                      ? `/works/${workId}/episodes`
+                      : `/works/${workId}`;
 
           return isAvailable ? (
             <Link

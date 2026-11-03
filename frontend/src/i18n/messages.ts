@@ -1,11 +1,11 @@
 const messages = {
   ko: {
     metadata: {
-      title: "글린 | 나의 작품",
+      title: "아크노트 | 나의 작품",
       description: "이야기를 차분히 이어 가는 웹소설 글쓰기 공간",
     },
     brand: {
-      name: "글린",
+      name: "아크노트",
       tagline: "당신의 이야기가 머무는 곳",
     },
     navigation: {
@@ -22,7 +22,7 @@ const messages = {
     },
     auth: {
       checking: "로그인 상태를 확인하고 있습니다...",
-      loginTitle: "글린에 로그인하고 작품을 시작해보세요.",
+      loginTitle: "아크노트에 로그인하고 작품을 시작해보세요.",
       loginDescription: "당신의 작품과 회차를 안전하게 이어서 관리할 수 있어요.",
       googleLogin: "Google로 로그인",
       checkError: "로그인 상태를 확인하지 못했습니다.",
@@ -33,8 +33,9 @@ const messages = {
       logoutError: "로그아웃하지 못했습니다. 다시 시도해 주세요.",
     },
     landing: {
-      metaTitle: "글린 | 당신의 이야기가 머무는 곳",
-      metaDescription: "작품을 만들고 회차별로 이어서 쓰는 웹소설 창작 공간",
+      metaTitle: "아크노트 | 당신의 이야기가 머무는 곳",
+      metaDescription:
+        "웹소설 작품 기획부터 등장인물, 관계도, 세계관, 회차 집필까지 한곳에서 관리하는 창작 워크스페이스",
       navFeatures: "기능",
       navAbout: "이야기가 시작되는 곳",
       navFaq: "자주 묻는 질문",
@@ -45,9 +46,9 @@ const messages = {
       eyebrow: "당신의 이야기가 머무는 곳",
       title: "쓰고, 이어가고,\n당신의 이야기를 쌓아보세요.",
       description:
-        "글린은 작가의 아이디어가 작품이 될 때까지,\n차분한 집중의 시간을 함께하는 웹 소설 창작 플랫폼입니다.",
+        "아크노트는 작가의 아이디어가 작품이 될 때까지,\n차분한 집중의 시간을 함께하는 웹 소설 창작 플랫폼입니다.",
       note: "별도의 회원가입 없이, Google 계정으로 바로 시작할 수 있습니다.",
-      previewLabel: "글린 작품 목록 미리보기",
+      previewLabel: "아크노트 작품 목록 미리보기",
       featuresTitle: "지금 사용할 수 있는 기능",
       features: [
         {
@@ -67,7 +68,7 @@ const messages = {
       ],
       aboutTitle: "이야기가 시작되는 곳",
       aboutDescription:
-        "글린은 웹소설을 쓰고 관리하기 위한 창작 공간입니다. 작품을 만들고, 회차를 작성하고, 저장한 이야기를 다시 열어 이어갈 수 있습니다.",
+        "아크노트는 웹소설을 쓰고 관리하기 위한 창작 공간입니다. 작품을 만들고, 회차를 작성하고, 저장한 이야기를 다시 열어 이어갈 수 있습니다.",
       faqTitle: "자주 묻는 질문",
       faq: [
         {
@@ -84,7 +85,7 @@ const messages = {
             "작품을 만들고 회차를 작성, 수정, 삭제하며 내 이야기만 따로 관리할 수 있습니다.",
         },
       ],
-      bottomTitle: "당신의 이야기를, 글린에서 시작해보세요.",
+      bottomTitle: "당신의 이야기를, 아크노트에서 시작해보세요.",
     },
     dashboard: {
       eyebrow: "MY WRITING ROOM",
@@ -240,6 +241,36 @@ const messages = {
         deleteField: "삭제",
         deleteConfirm: "이 항목을 삭제하시겠습니까?",
         labelRequired: "항목 이름을 입력해 주세요.",
+      },
+      world: {
+        backToHome: "작품 홈으로 돌아가기",
+        title: "세계관",
+        description: "작품의 시대, 공간과 분위기를 정리해두세요.",
+        era: "시대적 배경",
+        eraPlaceholder: "예: 현대 대한민국",
+        places: "주요 공간",
+        placesPlaceholder: "예: 서울, 강남경찰서, 명화그룹 본사",
+        atmosphere: "전체 분위기",
+        atmospherePlaceholder: "예: 현대 미스터리 로맨스, 긴장감 있는 분위기",
+        save: "저장",
+        saving: "저장 중...",
+        saved: "저장됨",
+        unsaved: "저장되지 않음",
+        saveError: "세계관을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+        customFieldInvalid: "추가 설정 정보를 확인해주세요.",
+        customTitle: "추가 설정",
+        customDescription: "작품에 필요한 배경을 자유롭게 추가해보세요.",
+        customEmpty: "아직 추가한 항목이 없습니다.",
+        addField: "+ 항목 추가",
+        fieldLabelPlaceholder: "항목 이름",
+        fieldValuePlaceholder: "내용을 입력해주세요.",
+        moveUp: "위로",
+        moveDown: "아래로",
+        moveUpLabel: "위로 이동",
+        moveDownLabel: "아래로 이동",
+        deleteField: "삭제",
+        deleteConfirm: "이 추가 설정을 삭제할까요?",
+        labelRequired: "추가 설정의 이름을 입력해주세요.",
       },
       characterList: {
         backToHome: "작품 홈으로 돌아가기",
@@ -471,6 +502,17 @@ const messages = {
           backToList: "관계 목록",
           editInSheet: "관계 설정에서 수정하기",
         },
+        referenceWorld: {
+          loading: "세계관을 불러오는 중...",
+          empty: "아직 세계관을 작성하지 않았습니다.",
+          addWorld: "세계관 작성하기",
+          loadError: "세계관을 불러오지 못했습니다.",
+          retry: "다시 시도",
+          editInSheet: "세계관 설정에서 수정하기",
+          era: "시대적 배경",
+          places: "주요 공간",
+          atmosphere: "전체 분위기",
+        },
       },
       quickLinks: {
         title: "바로가기",
@@ -506,11 +548,11 @@ const messages = {
   },
   en: {
     metadata: {
-      title: "Glean | My Works",
+      title: "ArcNote | My Works",
       description: "A calm writing space for stories that grow one page at a time",
     },
     brand: {
-      name: "Glean",
+      name: "ArcNote",
       tagline: "A place where your stories stay",
     },
     navigation: {
@@ -527,7 +569,7 @@ const messages = {
     },
     auth: {
       checking: "Checking your session...",
-      loginTitle: "Sign in to Glean and begin your story.",
+      loginTitle: "Sign in to ArcNote and begin your story.",
       loginDescription: "Keep your works and episodes safely organized.",
       googleLogin: "Continue with Google",
       checkError: "We couldn't check your session.",
@@ -538,9 +580,9 @@ const messages = {
       logoutError: "We couldn't log you out. Please try again.",
     },
     landing: {
-      metaTitle: "Glean | A place where your stories stay",
+      metaTitle: "ArcNote | A place where your stories stay",
       metaDescription:
-        "A writing space for creating works and continuing stories episode by episode",
+        "A writing workspace for planning, characters, relationships, worldbuilding, and episode writing",
       navFeatures: "Features",
       navAbout: "Where stories begin",
       navFaq: "FAQ",
@@ -549,11 +591,11 @@ const messages = {
       startWithGoogle: "Start with Google",
       goToWorks: "Go to my works",
       eyebrow: "A place where your stories stay",
-      title: "Write, continue,\nand gather your story.",
+      title: "Write, continue,\nand keep your story.",
       description:
-        "Glean is a web novel writing platform that stays with you\nfrom the first idea to a finished work.",
+        "ArcNote is a web novel writing platform that stays with you\nfrom the first idea to a finished work.",
       note: "No extra sign-up. Start right away with your Google account.",
-      previewLabel: "Glean works preview",
+      previewLabel: "ArcNote works preview",
       featuresTitle: "What you can do now",
       features: [
         {
@@ -574,7 +616,7 @@ const messages = {
       ],
       aboutTitle: "Where stories begin",
       aboutDescription:
-        "Glean is a writing space for web novels. Create a work, write episodes, save them, and open them again when you are ready to continue.",
+        "ArcNote is a writing space for web novels. Create a work, write episodes, save them, and open them again when you are ready to continue.",
       faqTitle: "FAQ",
       faq: [
         {
@@ -591,7 +633,7 @@ const messages = {
             "You can create works and write, edit, or delete episodes that belong only to you.",
         },
       ],
-      bottomTitle: "Begin your story in Glean.",
+      bottomTitle: "Begin your story in ArcNote.",
     },
     dashboard: {
       eyebrow: "MY WRITING ROOM",
@@ -746,6 +788,36 @@ const messages = {
         deleteField: "Delete",
         deleteConfirm: "Delete this field?",
         labelRequired: "Please enter a field name.",
+      },
+      world: {
+        backToHome: "Back to work home",
+        title: "Worldbuilding",
+        description: "Capture the era, places, and mood of the story.",
+        era: "Era",
+        eraPlaceholder: "e.g. Present-day Korea",
+        places: "Main places",
+        placesPlaceholder: "e.g. Seoul, Gangnam precinct, Myunghwa HQ",
+        atmosphere: "Atmosphere",
+        atmospherePlaceholder: "e.g. Contemporary mystery romance, taut mood",
+        save: "Save",
+        saving: "Saving...",
+        saved: "Saved",
+        unsaved: "Not saved",
+        saveError: "We couldn't save the world notes. Please try again.",
+        customFieldInvalid: "Please check the extra setting details.",
+        customTitle: "Extra settings",
+        customDescription: "Add any background notes this story needs.",
+        customEmpty: "No extra settings yet.",
+        addField: "+ Add setting",
+        fieldLabelPlaceholder: "Setting name",
+        fieldValuePlaceholder: "Enter the content.",
+        moveUp: "Up",
+        moveDown: "Down",
+        moveUpLabel: "Move up",
+        moveDownLabel: "Move down",
+        deleteField: "Delete",
+        deleteConfirm: "Delete this extra setting?",
+        labelRequired: "Please enter a name for the extra setting.",
       },
       characterList: {
         backToHome: "Back to work home",
@@ -976,6 +1048,17 @@ const messages = {
           retry: "Try again",
           backToList: "Relationship list",
           editInSheet: "Edit in relationship notes",
+        },
+        referenceWorld: {
+          loading: "Loading world notes...",
+          empty: "No world notes yet.",
+          addWorld: "Write world notes",
+          loadError: "We couldn't load the world notes.",
+          retry: "Try again",
+          editInSheet: "Edit in world notes",
+          era: "Era",
+          places: "Main places",
+          atmosphere: "Atmosphere",
         },
       },
       quickLinks: {

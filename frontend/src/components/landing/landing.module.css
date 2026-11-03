@@ -38,32 +38,39 @@
 
 .leafMark {
   position: relative;
-  width: 16px;
-  height: 22px;
+  width: 13px;
+  height: 17px;
   flex: 0 0 auto;
-  transform: rotate(21deg);
+  box-sizing: border-box;
+  border: 1.5px solid var(--olive);
+  border-radius: 1px 6px 1.5px 1.5px;
 }
 
 .leafMark::before,
 .leafMark::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 14px;
-  border-radius: 100% 0 100% 0;
-  background: var(--olive);
+  background: transparent;
 }
 
 .leafMark::before {
-  top: 0;
-  left: 6px;
+  top: 4px;
+  left: 2px;
+  right: 2px;
+  height: 5px;
+  border-top: 1.5px solid var(--olive);
+  border-radius: 100% 100% 0 0;
+  opacity: 0.8;
 }
 
 .leafMark::after {
-  top: 7px;
-  left: 1px;
-  transform: rotate(-72deg);
-  opacity: 0.72;
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  border-left: 1.4px solid var(--olive);
+  border-bottom: 1.4px solid var(--olive);
+  opacity: 0.9;
 }
 
 .headerNav {
@@ -210,6 +217,7 @@
 .previewBrand {
   margin-bottom: 28px;
   font-size: 22px;
+  white-space: nowrap;
 }
 
 .previewNav {
@@ -236,6 +244,8 @@
 }
 
 .previewMain {
+  min-width: 0;
+  overflow-x: hidden;
   padding: 18px 22px 28px;
 }
 
@@ -244,10 +254,15 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 22px;
+  min-width: 0;
 }
 
 .previewSearch {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
   flex: 1;
+  min-width: 0;
   height: 36px;
   padding: 0 14px;
   border: 1px solid #ded9ce;
@@ -255,15 +270,20 @@
   color: #9a9589;
   background: rgba(255, 255, 255, 0.72);
   font-size: 12px;
+  line-height: 1;
 }
 
 .previewBell,
 .previewAvatar {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   color: #6d7268;
+  line-height: 1;
 }
 
 .previewAvatar {
@@ -275,16 +295,28 @@
 }
 
 .previewHeading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
   margin-bottom: 16px;
+}
+
+.previewHeadingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.previewTitleBlock {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
 }
 
 .previewEyebrow {
   display: block;
-  margin-bottom: 6px;
   color: var(--olive);
   font-size: 10px;
   font-weight: 750;
@@ -292,18 +324,26 @@
 }
 
 .previewHeading h2 {
+  min-width: 0;
+  margin: 0;
   font-family: var(--font-serif);
   font-size: 28px;
+  line-height: 1.2;
   letter-spacing: -0.04em;
 }
 
 .previewHeading p {
-  margin-top: 4px;
+  margin: 0;
   color: var(--muted);
   font-size: 12px;
 }
 
 .previewNew {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   min-height: 36px;
   padding: 0 14px;
   border-radius: 999px;
@@ -311,6 +351,8 @@
   background: #58654f;
   font-size: 12px;
   font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .previewRecent {
@@ -562,6 +604,14 @@
 
   .hero h1 {
     font-size: 32px;
+  }
+
+  .previewHeadingRow {
+    flex-wrap: wrap;
+  }
+
+  .previewNew {
+    margin-left: auto;
   }
 
   .previewRecent {

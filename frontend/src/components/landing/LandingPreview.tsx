@@ -43,20 +43,22 @@ export default function LandingPreview({ copy }: LandingPreviewProps) {
                 {copy.header.searchPlaceholder}
               </div>
               <span className={styles.previewBell}>♢</span>
-              <span className={styles.previewAvatar}>글</span>
+              <span className={styles.previewAvatar}>아</span>
             </div>
 
             <div className={styles.previewHeading}>
-              <div>
-                <span className={styles.previewEyebrow}>
-                  {copy.dashboard.eyebrow}
+              <div className={styles.previewHeadingRow}>
+                <div className={styles.previewTitleBlock}>
+                  <span className={styles.previewEyebrow}>
+                    {copy.dashboard.eyebrow}
+                  </span>
+                  <h2>{copy.dashboard.title}</h2>
+                </div>
+                <span className={styles.previewNew}>
+                  ＋ {copy.dashboard.newWork}
                 </span>
-                <h2>{copy.dashboard.title}</h2>
-                <p>{copy.dashboard.description}</p>
               </div>
-              <span className={styles.previewNew}>
-                ＋ {copy.dashboard.newWork}
-              </span>
+              <p>{copy.dashboard.description}</p>
             </div>
 
             <div className={styles.previewRecent}>

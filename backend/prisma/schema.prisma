@@ -33,6 +33,7 @@ model Work {
   planning           WorkPlanning?
   characters         Character[]
   characterRelations CharacterRelation[]
+  worldSetting       WorkWorldSetting?
 
   @@map("work")
 }
@@ -177,4 +178,35 @@ model WorkPlanningCustomField {
 
   @@index([planningId, sortOrder])
   @@map("work_planning_custom_field")
+}
+
+model WorkWorldSetting {
+  id         Int      @id @default(autoincrement())
+  workId     Int      @unique @map("work_id")
+  era        String?  @db.Text
+  places     String?  @db.Text
+  atmosphere String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  work         Work                           @relation(fields: [workId], references: [id], onDelete: Cascade)
+  customFields WorkWorldSettingCustomField[]
+
+  @@map("work_world_setting")
+}
+
+model WorkWorldSettingCustomField {
+  id        Int      @id @default(autoincrement())
+  settingId Int      @map("setting_id")
+  label     String   @db.VarChar(100)
+  value     String   @db.Text
+  sortOrder Int      @map("sort_order")
+  valueType String   @default("text") @map("value_type") @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  setting WorkWorldSetting @relation(fields: [settingId], references: [id], onDelete: Cascade)
+
+  @@index([settingId, sortOrder])
+  @@map("work_world_setting_custom_field")
 }

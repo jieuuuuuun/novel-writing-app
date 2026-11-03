@@ -39,22 +39,28 @@
 }
 
 .sidebarBrand strong {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
   color: #263127;
   font-family: var(--font-serif);
   font-size: 28px;
   line-height: 1;
   letter-spacing: -0.08em;
+  white-space: nowrap;
 }
 
 .sidebarBrand strong i,
 .mobileBrand i {
   position: relative;
-  width: 14px;
-  height: 20px;
+  width: 13px;
+  height: 17px;
   flex: 0 0 auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: 1.5px solid var(--olive);
+  border-radius: 1px 6px 1.5px 1.5px;
 }
 
 .sidebarBrand strong i::before,
@@ -63,19 +69,29 @@
 .mobileBrand i::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 14px;
-  border-radius: 100% 0 100% 0;
-  background: var(--olive);
-  transform: rotate(20deg);
+  background: transparent;
+}
+
+.sidebarBrand strong i::before,
+.mobileBrand i::before {
+  top: 4px;
+  left: 2px;
+  right: 2px;
+  height: 5px;
+  border-top: 1.5px solid var(--olive);
+  border-radius: 100% 100% 0 0;
+  opacity: 0.8;
 }
 
 .sidebarBrand strong i::after,
 .mobileBrand i::after {
-  top: 7px;
-  left: -4px;
-  opacity: 0.65;
-  transform: rotate(-50deg);
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  border-left: 1.4px solid var(--olive);
+  border-bottom: 1.4px solid var(--olive);
+  opacity: 0.9;
 }
 
 .sidebarBrand a > span {
@@ -977,13 +993,14 @@ a.quickLinkCard:focus-visible {
   }
 
   .mobileBrand {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 5px;
     font-family: var(--font-serif);
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.07em;
+    white-space: nowrap;
   }
 
   .mobileBrand i {

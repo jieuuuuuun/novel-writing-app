@@ -32,10 +32,12 @@
 .brand::after {
   content: "";
   width: 11px;
-  height: 17px;
-  border-radius: 100% 0 100% 0;
-  background: var(--olive);
-  transform: rotate(28deg);
+  height: 15px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--olive);
+  border-radius: 1px 5px 1px 1px;
+  background: transparent;
+  transform: none;
 }
 
 .authCard h1 {
@@ -100,12 +102,14 @@
 .userMenu {
   position: relative;
   z-index: 60;
+  display: flex;
+  align-items: center;
   flex: 0 0 auto;
 }
 
 .profileTrigger {
   min-width: 35px;
-  min-height: 35px;
+  height: 37px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -115,6 +119,7 @@
   color: var(--ink);
   background: transparent;
   font: inherit;
+  line-height: 1;
   cursor: pointer;
 }
 

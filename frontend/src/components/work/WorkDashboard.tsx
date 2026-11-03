@@ -235,19 +235,19 @@ export default function WorkDashboard() {
 
         <main className={styles.mainContent}>
           <section className={styles.pageHeading}>
-            <div>
-              <span className={styles.eyebrow}>{copy.dashboard.eyebrow}</span>
+            <span className={styles.eyebrow}>{copy.dashboard.eyebrow}</span>
+            <div className={styles.pageHeadingRow}>
               <h1>{copy.dashboard.title}</h1>
-              <p>{copy.dashboard.description}</p>
+              <button
+                className={styles.newWorkButton}
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <span aria-hidden="true">＋</span>
+                {copy.dashboard.newWork}
+              </button>
             </div>
-            <button
-              className={styles.newWorkButton}
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <span aria-hidden="true">＋</span>
-              {copy.dashboard.newWork}
-            </button>
+            <p>{copy.dashboard.description}</p>
           </section>
 
           <section className={styles.recentCard}>
