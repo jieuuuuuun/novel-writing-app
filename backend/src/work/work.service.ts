@@ -60,8 +60,15 @@ export class WorkService {
   async remove(id: number, userId: number) {
     await this.findOne(id, userId);
 
-    return this.prisma.work.delete({
-      where: { id },
+    return this.prisma.$transaction(async (tx) => {
+      await tx.work.update({
+        where: { id },
+        data: { currentSynopsisVersionId: null },
+      });
+
+      return tx.work.delete({
+        where: { id },
+      });
     });
   }
 }

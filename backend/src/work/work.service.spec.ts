@@ -12,6 +12,7 @@ describe('WorkService', () => {
       update: ReturnType<typeof vi.fn>;
       delete: ReturnType<typeof vi.fn>;
     };
+    $transaction: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -23,7 +24,12 @@ describe('WorkService', () => {
         update: vi.fn(),
         delete: vi.fn(),
       },
+      $transaction: vi.fn(),
     };
+    prisma.$transaction.mockImplementation(
+      async (callback: (tx: typeof prisma) => Promise<unknown>) =>
+        callback(prisma),
+    );
     service = new WorkService(prisma as unknown as PrismaService);
   });
 
@@ -69,21 +75,40 @@ describe('WorkService', () => {
     });
   });
 
-  it('updates and deletes a work after ownership verification', async () => {
+  it('updates a work after ownership verification', async () => {
     prisma.work.findFirst.mockResolvedValue({ id: 4, userId: 2 });
     prisma.work.update.mockResolvedValue({ id: 4 });
-    prisma.work.delete.mockResolvedValue({ id: 4 });
 
     await service.update(4, 2, { title: 'Updated' });
-    await service.remove(4, 2);
 
-    expect(prisma.work.findFirst).toHaveBeenCalledTimes(2);
+    expect(prisma.work.findFirst).toHaveBeenCalledTimes(1);
     expect(prisma.work.update).toHaveBeenCalledWith({
       where: { id: 4 },
       data: {
         title: 'Updated',
         subtitle: undefined,
       },
+    });
+  });
+
+  it('nulls the current synopsis pointer before deleting a work', async () => {
+    prisma.work.findFirst.mockResolvedValue({
+      id: 4,
+      userId: 2,
+      currentSynopsisVersionId: 21,
+    });
+    prisma.work.update.mockResolvedValue({
+      id: 4,
+      currentSynopsisVersionId: null,
+    });
+    prisma.work.delete.mockResolvedValue({ id: 4 });
+
+    await service.remove(4, 2);
+
+    expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+    expect(prisma.work.update).toHaveBeenCalledWith({
+      where: { id: 4 },
+      data: { currentSynopsisVersionId: null },
     });
     expect(prisma.work.delete).toHaveBeenCalledWith({
       where: { id: 4 },

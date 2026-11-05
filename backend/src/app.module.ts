@@ -8,6 +8,7 @@ import { PlanningModule } from './planning/planning.module.js';
 import { CharacterModule } from './character/character.module.js';
 import { RelationModule } from './relation/relation.module.js';
 import { WorldModule } from './world/world.module.js';
+import { SynopsisModule } from './synopsis/synopsis.module.js';
 import { AuthModule } from './auth/auth.module.js';
 
 @Module({
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module.js';
     CharacterModule,
     RelationModule,
     WorldModule,
+    SynopsisModule,
     AuthModule,
   ],
   controllers: [AppController],
