@@ -12,6 +12,7 @@ interface WorkspaceSidebarProps {
     | "characters"
     | "relationships"
     | "world"
+    | "synopsis"
     | "episodes";
   isMobile?: boolean;
   onClose?: () => void;
@@ -67,6 +68,7 @@ export default function WorkspaceSidebar({
             key === "characters" ||
             key === "relationships" ||
             key === "world" ||
+            key === "synopsis" ||
             key === "episodes";
           const href =
             key === "planning"
@@ -77,9 +79,11 @@ export default function WorkspaceSidebar({
                   ? `/works/${workId}/relations`
                   : key === "world"
                     ? `/works/${workId}/world`
-                    : key === "episodes"
-                      ? `/works/${workId}/episodes`
-                      : `/works/${workId}`;
+                    : key === "synopsis"
+                      ? `/works/${workId}/synopsis`
+                      : key === "episodes"
+                        ? `/works/${workId}/episodes`
+                        : `/works/${workId}`;
 
           return isAvailable ? (
             <Link

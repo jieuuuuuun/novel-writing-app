@@ -488,6 +488,7 @@ export default function WorkSynopsisPage({ workId }: WorkSynopsisPageProps) {
         copy={copy.workspace}
         brand={copy.brand}
         workId={numericWorkId}
+        activeMenu="synopsis"
       />
 
       <div className={workspaceStyles.workspaceBody}>
@@ -546,6 +547,7 @@ export default function WorkSynopsisPage({ workId }: WorkSynopsisPageProps) {
               copy={copy.workspace}
               brand={copy.brand}
               workId={numericWorkId}
+              activeMenu="synopsis"
               isMobile
               onClose={() => setIsMenuOpen(false)}
             />

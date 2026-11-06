@@ -43,6 +43,7 @@ export default function WorkspaceQuickLinks({
   const hrefByKey: Record<string, string> = {
     characters: `/works/${workId}/characters`,
     relationships: `/works/${workId}/relations`,
+    synopsis: `/works/${workId}/synopsis`,
     world: `/works/${workId}/world`,
   };
 
