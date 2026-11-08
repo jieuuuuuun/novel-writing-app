@@ -22,7 +22,6 @@ export default function WorkspaceHero({
           <Link
             className={styles.newEpisodeAction}
             href={`/works/${work.id}/episodes/new`}
-            title={copy.hero.preparing}
           >
             <span aria-hidden="true">✎</span>
             {copy.hero.newEpisode}

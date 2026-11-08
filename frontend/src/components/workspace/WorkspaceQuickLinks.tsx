@@ -25,14 +25,14 @@ export default function WorkspaceQuickLinks({
       ...copy.quickLinks.relationships,
     },
     {
-      key: "synopsis",
-      icon: quickLinkIcons[2],
-      ...copy.quickLinks.synopsis,
-    },
-    {
       key: "world",
       icon: quickLinkIcons[3],
       ...copy.quickLinks.world,
+    },
+    {
+      key: "synopsis",
+      icon: quickLinkIcons[2],
+      ...copy.quickLinks.synopsis,
     },
     {
       key: "episodes",
@@ -45,6 +45,7 @@ export default function WorkspaceQuickLinks({
     relationships: `/works/${workId}/relations`,
     synopsis: `/works/${workId}/synopsis`,
     world: `/works/${workId}/world`,
+    episodes: `/works/${workId}/episodes`,
   };
 
   return (
