@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -34,6 +35,15 @@ function requireEnvironment(name: string): string {
 
 function isProduction(): boolean {
   return process.env.NODE_ENV === 'production';
+}
+
+function clearAccessTokenCookie(response: Response): void {
+  response.clearCookie('access_token', {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: isProduction(),
+    path: '/',
+  });
 }
 
 @Controller('auth')
@@ -78,14 +88,20 @@ export class AuthController {
     };
   }
 
+  @Delete('me')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteCurrentUser(
+    @CurrentUser() user: AuthenticatedUser,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
+    await this.authService.deleteAccount(user.id);
+    clearAccessTokenCookie(response);
+  }
+
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   logout(@Res({ passthrough: true }) response: Response): void {
-    response.clearCookie('access_token', {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: isProduction(),
-      path: '/',
-    });
+    clearAccessTokenCookie(response);
   }
 }

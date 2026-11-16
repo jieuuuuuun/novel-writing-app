@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type {
@@ -96,5 +96,27 @@ export class AuthService {
 
   getAccessTokenMaxAge(): number {
     return this.expiresInSeconds * 1000;
+  }
+
+  async deleteAccount(userId: number): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.work.updateMany({
+        where: { userId },
+        data: { currentSynopsisVersionId: null },
+      });
+
+      await tx.user.delete({
+        where: { id: userId },
+      });
+    });
   }
 }

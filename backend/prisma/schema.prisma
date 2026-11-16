@@ -45,7 +45,7 @@ model Episode {
   id        Int      @id @default(autoincrement())
   workId    Int      @map("work_id")
   title     String   @db.VarChar(200)
-  content   String   @db.Text
+  content   String   @db.MediumText
   sortOrder Int      @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

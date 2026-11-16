@@ -96,6 +96,52 @@ describe('EpisodeService', () => {
     });
   });
 
+  it.each([5000, 10000, 30000])(
+    'passes a %s-character manuscript through create without application-level length rejection',
+    async (length) => {
+      prisma.work.findFirst.mockResolvedValue({ id: 4 });
+      prisma.episode.create.mockResolvedValue({ id: 8 });
+      const content = '가'.repeat(length);
+
+      await service.create(2, {
+        workId: 4,
+        title: 'Long episode',
+        content,
+        sortOrder: 1,
+      });
+
+      expect(prisma.episode.create).toHaveBeenCalledWith({
+        data: {
+          workId: 4,
+          title: 'Long episode',
+          content,
+          sortOrder: 1,
+        },
+      });
+    },
+  );
+
+  it('passes a long manuscript through update without application-level length rejection', async () => {
+    prisma.episode.findFirst.mockResolvedValue({ id: 8, workId: 4 });
+    prisma.episode.update.mockResolvedValue({ id: 8 });
+    const content = '나'.repeat(30000);
+
+    await service.update(8, 2, {
+      title: 'Updated episode',
+      content,
+      sortOrder: 2,
+    });
+
+    expect(prisma.episode.update).toHaveBeenCalledWith({
+      where: { id: 8 },
+      data: {
+        title: 'Updated episode',
+        content,
+        sortOrder: 2,
+      },
+    });
+  });
+
   it('updates and deletes an episode after ownership verification', async () => {
     prisma.episode.findFirst.mockResolvedValue({ id: 8, workId: 4 });
     prisma.episode.update.mockResolvedValue({ id: 8 });

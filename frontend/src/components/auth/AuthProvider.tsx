@@ -26,6 +26,7 @@ interface AuthContextValue {
   authenticated: boolean;
   status: AuthStatus;
   logout: () => Promise<void>;
+  endSession: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -47,7 +48,10 @@ export default function AuthProvider({
   const pathname = usePathname();
   const router = useRouter();
   const isAppRoute =
-    pathname === "/works" || pathname.startsWith("/works/");
+    pathname === "/works" ||
+    pathname.startsWith("/works/") ||
+    pathname === "/settings" ||
+    pathname.startsWith("/settings/");
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [hasCheckError, setHasCheckError] = useState(false);
@@ -114,8 +118,7 @@ export default function AuthProvider({
     }
   }, []);
 
-  const logout = useCallback(async () => {
-    await requestLogout();
+  const endSession = useCallback(() => {
     setHasLoggedOut(true);
     setUser(null);
     setStatus("unauthenticated");
@@ -123,14 +126,20 @@ export default function AuthProvider({
     router.replace("/");
   }, [router]);
 
+  const logout = useCallback(async () => {
+    await requestLogout();
+    endSession();
+  }, [endSession]);
+
   const contextValue = useMemo<AuthContextValue>(
     () => ({
       user,
       authenticated: status === "authenticated",
       status,
       logout,
+      endSession,
     }),
-    [logout, status, user],
+    [endSession, logout, status, user],
   );
 
   if (hasLoggedOut && !isAppRoute) {

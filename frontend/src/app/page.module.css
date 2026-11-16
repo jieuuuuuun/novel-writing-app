@@ -142,6 +142,12 @@
   box-shadow: inset 3px 0 0 var(--olive);
 }
 
+.navItem:focus-visible,
+.activeNavItem:focus-visible {
+  outline: 2px solid rgba(70, 86, 61, 0.76);
+  outline-offset: 2px;
+}
+
 .sidebarNote {
   margin-top: auto;
   padding: 20px 11px 0;

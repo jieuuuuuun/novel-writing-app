@@ -47,6 +47,20 @@ export async function logout(): Promise<void> {
   }
 }
 
+export async function deleteCurrentUser(): Promise<void> {
+  const response = await fetch(`${AUTH_API_PATH}/me`, {
+    method: "DELETE",
+  });
+
+  if (response.status === 401) {
+    notifyUnauthorized();
+  }
+
+  if (!response.ok) {
+    throw new Error(await readAuthError(response));
+  }
+}
+
 export function getGoogleLoginUrl(): string {
   return `${AUTH_API_PATH}/google`;
 }
