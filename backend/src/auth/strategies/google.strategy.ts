@@ -13,6 +13,11 @@ function requireEnvironment(name: string): string {
   return value;
 }
 
+type GoogleEmail = {
+  value?: string;
+  verified?: boolean;
+};
+
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
@@ -29,7 +34,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     _refreshToken: string,
     profile: Profile,
   ): GoogleUser {
-    const email = profile.emails?.[0]?.value;
+    const emailEntry = profile.emails?.[0] as GoogleEmail | undefined;
+    const email = emailEntry?.value?.trim();
 
     if (!profile.id || !email) {
       throw new UnauthorizedException(
@@ -41,6 +47,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       googleId: profile.id,
       email,
       name: (profile.displayName || email.split('@')[0]).slice(0, 100),
+      // passport-google-oauth20 OpenID parser sets emails[0].verified from email_verified.
+      emailVerified: emailEntry?.verified === true,
     };
   }
 }

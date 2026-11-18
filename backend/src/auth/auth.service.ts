@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type {
@@ -61,22 +65,28 @@ export class AuthService {
       return googleUser;
     }
 
+    if (!profile.emailVerified) {
+      throw new UnauthorizedException(
+        'Google 계정에서 인증된 이메일을 확인할 수 없습니다.',
+      );
+    }
+
     const emailUser = await this.prisma.user.findUnique({
       where: { email: profile.email },
     });
 
     if (emailUser) {
-      return this.prisma.user.update({
-        where: { id: emailUser.id },
-        data: {
-          googleId: profile.googleId,
-          name: profile.name,
-        },
-      });
+      throw new UnauthorizedException(
+        '이미 다른 Google 계정으로 가입된 이메일입니다.',
+      );
     }
 
     return this.prisma.user.create({
-      data: profile,
+      data: {
+        googleId: profile.googleId,
+        email: profile.email,
+        name: profile.name,
+      },
     });
   }
 

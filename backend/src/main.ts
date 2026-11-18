@@ -3,6 +3,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module.js';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
+import { shouldSetupSwagger } from './swagger.util.js';
 
 export const JSON_BODY_LIMIT = '1mb';
 
@@ -18,14 +19,16 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const config = new DocumentBuilder()
-    .setTitle('Novel Writing App API')
-    .setDescription('웹소설 글쓰기 앱 API')
-    .setVersion('1.0')
-    .build();
+  if (shouldSetupSwagger()) {
+    const config = new DocumentBuilder()
+      .setTitle('Novel Writing App API')
+      .setDescription('웹소설 글쓰기 앱 API')
+      .setVersion('1.0')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
   
   await app.listen(process.env.PORT ?? 3001);
 }

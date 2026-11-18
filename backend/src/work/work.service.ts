@@ -1,17 +1,27 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { CreateWorkDto } from './dto/create-work.dto/create-work.dto.js';
 import { UpdateWorkDto } from './dto/update-work.dto/update-work.dto.js';
+
+const TITLE_MAX_LENGTH = 200;
+const SUBTITLE_MAX_LENGTH = 500;
 
 @Injectable()
 export class WorkService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(userId: number, createWorkDto: CreateWorkDto) {
+  async create(userId: number, createWorkDto: CreateWorkDto) {
+    const title = this.parseRequiredTitle(createWorkDto.title);
+    const subtitle = this.parseOptionalSubtitle(createWorkDto.subtitle);
+
     return this.prisma.work.create({
       data: {
-        title: createWorkDto.title,
-        subtitle: createWorkDto.subtitle,
+        title,
+        ...(subtitle !== undefined ? { subtitle } : {}),
         userId,
       },
     });
@@ -50,10 +60,7 @@ export class WorkService {
 
     return this.prisma.work.update({
       where: { id },
-      data: {
-        title: updateWorkDto.title,
-        subtitle: updateWorkDto.subtitle,
-      },
+      data: this.parseUpdate(updateWorkDto),
     });
   }
 
@@ -70,5 +77,75 @@ export class WorkService {
         where: { id },
       });
     });
+  }
+
+  private parseUpdate(dto: UpdateWorkDto) {
+    const data: { title?: string; subtitle?: string | null } = {};
+
+    if (dto.title !== undefined) {
+      data.title = this.parseRequiredTitle(dto.title);
+    }
+
+    if (dto.subtitle !== undefined) {
+      data.subtitle = this.parseOptionalSubtitle(dto.subtitle) ?? null;
+    }
+
+    return data;
+  }
+
+  private parseRequiredTitle(value: string | undefined) {
+    const title = this.parseBoundedString(
+      value,
+      'title',
+      TITLE_MAX_LENGTH,
+    ).trim();
+
+    if (!title) {
+      throw new BadRequestException('title is required.');
+    }
+
+    return title;
+  }
+
+  private parseOptionalSubtitle(value: string | undefined) {
+    if (value === undefined) {
+      return undefined;
+    }
+
+    const subtitle = this.parseBoundedString(
+      value,
+      'subtitle',
+      SUBTITLE_MAX_LENGTH,
+    ).trim();
+
+    return subtitle.length === 0 ? null : subtitle;
+  }
+
+  private parseBoundedString(
+    value: string | undefined,
+    fieldName: string,
+    maxLength: number,
+  ) {
+    const parsed = this.parseText(value, fieldName);
+
+    if (parsed.length > maxLength) {
+      throw new BadRequestException(
+        `${fieldName} must be at most ${maxLength} characters.`,
+      );
+    }
+
+    return parsed;
+  }
+
+  private parseText(value: string | undefined, fieldName: string) {
+    if (value == null) {
+      return '';
+    }
+
+    if (typeof value !== 'string') {
+      throw new BadRequestException(`${fieldName} must be a string.`);
+    }
+
+    return value;
   }
 }

@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { PrismaService } from '../prisma/prisma.service.js';
 import { WorkService } from './work.service.js';
 
@@ -86,7 +86,72 @@ describe('WorkService', () => {
       where: { id: 4 },
       data: {
         title: 'Updated',
-        subtitle: undefined,
+      },
+    });
+  });
+
+  it('rejects a blank title', async () => {
+    await expect(service.create(2, { title: '   ' })).rejects.toBeInstanceOf(
+      BadRequestException,
+    );
+    expect(prisma.work.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-string title', async () => {
+    await expect(
+      service.create(2, { title: 12 as unknown as string }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.work.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a title longer than 200 characters', async () => {
+    await expect(
+      service.create(2, { title: '가'.repeat(201) }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.work.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a subtitle longer than 500 characters', async () => {
+    await expect(
+      service.create(2, { title: 'My work', subtitle: '가'.repeat(501) }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.work.create).not.toHaveBeenCalled();
+  });
+
+  it('does not persist client-supplied userId, id, or synopsis pointer fields', async () => {
+    prisma.work.create.mockResolvedValue({ id: 10 });
+
+    await service.create(2, {
+      title: 'My work',
+      subtitle: 'Subtitle',
+      userId: 99,
+      id: 1,
+      currentSynopsisVersionId: 8,
+    } as never);
+
+    expect(prisma.work.create).toHaveBeenCalledWith({
+      data: {
+        title: 'My work',
+        subtitle: 'Subtitle',
+        userId: 2,
+      },
+    });
+  });
+
+  it('does not apply extra fields on update', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4, userId: 2 });
+    prisma.work.update.mockResolvedValue({ id: 4 });
+
+    await service.update(4, 2, {
+      title: 'Updated',
+      userId: 99,
+      currentSynopsisVersionId: 8,
+    } as never);
+
+    expect(prisma.work.update).toHaveBeenCalledWith({
+      where: { id: 4 },
+      data: {
+        title: 'Updated',
       },
     });
   });

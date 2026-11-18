@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { PrismaService } from '../prisma/prisma.service.js';
 import { EpisodeService } from './episode.service.js';
 
@@ -165,6 +165,98 @@ describe('EpisodeService', () => {
     });
     expect(prisma.episode.delete).toHaveBeenCalledWith({
       where: { id: 8 },
+    });
+  });
+
+  it('rejects a blank title', async () => {
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: '   ',
+        content: 'Content',
+        sortOrder: 1,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.work.findFirst).not.toHaveBeenCalled();
+    expect(prisma.episode.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-string title', async () => {
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: 12 as unknown as string,
+        content: 'Content',
+        sortOrder: 1,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.episode.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a title longer than 200 characters', async () => {
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: '가'.repeat(201),
+        content: 'Content',
+        sortOrder: 1,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.episode.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects non-string content', async () => {
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: 'Episode',
+        content: { html: '<p>x</p>' } as unknown as string,
+        sortOrder: 1,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.episode.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a negative or fractional sortOrder', async () => {
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: 'Episode',
+        content: 'Content',
+        sortOrder: -1,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      service.create(2, {
+        workId: 4,
+        title: 'Episode',
+        content: 'Content',
+        sortOrder: 1.5,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prisma.episode.create).not.toHaveBeenCalled();
+  });
+
+  it('does not persist client-supplied userId or id fields', async () => {
+    prisma.work.findFirst.mockResolvedValue({ id: 4 });
+    prisma.episode.create.mockResolvedValue({ id: 8 });
+
+    await service.create(2, {
+      workId: 4,
+      title: 'Episode',
+      content: 'Content',
+      sortOrder: 1,
+      userId: 99,
+      id: 1,
+    } as never);
+
+    expect(prisma.episode.create).toHaveBeenCalledWith({
+      data: {
+        workId: 4,
+        title: 'Episode',
+        content: 'Content',
+        sortOrder: 1,
+      },
     });
   });
 });
