@@ -69,7 +69,7 @@ const messages = {
         "아크노트가 어떤 정보를 어떻게 다루는지 안내합니다.",
       termsDescription: "아크노트 이용에 관한 기본 약속을 안내합니다.",
       accountDeletionDescription:
-        "ArcNote 계정 및 저장 데이터 삭제 방법 안내",
+        "아크노트 계정 및 저장 데이터 삭제 방법 안내",
     },
     landing: {
       metaTitle: "아크노트 | 당신의 이야기가 머무는 곳",
@@ -150,8 +150,9 @@ const messages = {
       edit: "수정",
       delete: "삭제",
       deleting: "삭제 중...",
-      deleteWorkConfirm:
-        "이 작품을 삭제하면 등록된 회차도 함께 삭제됩니다.\n정말 삭제할까요?",
+      deleteWorkTitle: "작품을 삭제할까요?",
+      deleteWorkDescription:
+        "삭제한 작품과 관련 데이터는 복구할 수 없습니다.",
       deleteWorkError: "작품을 삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
     },
     modal: {
@@ -242,7 +243,9 @@ const messages = {
         edit: "수정",
         delete: "삭제",
         deleting: "삭제 중...",
-        deleteConfirm: "이 회차를 삭제하시겠습니까?",
+        deleteTitle: "회차를 삭제할까요?",
+        deleteDescription: "삭제한 회차는 복구할 수 없습니다.",
+        deleteCancel: "취소",
         deleteError: "회차를 삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
       },
       planning: {
@@ -815,8 +818,9 @@ const messages = {
       edit: "Edit",
       delete: "Delete",
       deleting: "Deleting...",
-      deleteWorkConfirm:
-        "Deleting this work will also delete all of its episodes.\nContinue?",
+      deleteWorkTitle: "Delete this work?",
+      deleteWorkDescription:
+        "Deleted works and related data cannot be recovered.",
       deleteWorkError: "We couldn't delete the work. Please try again.",
     },
     modal: {
@@ -907,7 +911,9 @@ const messages = {
         edit: "Edit",
         delete: "Delete",
         deleting: "Deleting...",
-        deleteConfirm: "Delete this episode?",
+        deleteTitle: "Delete this episode?",
+        deleteDescription: "Deleted episodes cannot be recovered.",
+        deleteCancel: "Cancel",
         deleteError: "We couldn't delete the episode. Please try again.",
       },
       planning: {

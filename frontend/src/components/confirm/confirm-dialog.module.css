@@ -1,0 +1,108 @@
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(47, 44, 37, 0.28);
+}
+
+.confirmCard {
+  width: min(420px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  display: grid;
+  gap: 10px;
+  padding: 24px 22px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbf8f1;
+  box-shadow: 0 18px 40px rgba(69, 62, 48, 0.14);
+}
+
+.confirmCard h2 {
+  overflow-wrap: anywhere;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.confirmCard p {
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.confirmActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ghostButton,
+.dangerButton {
+  width: fit-content;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    transform 160ms ease,
+    opacity 160ms ease,
+    border-color 160ms ease;
+}
+
+.ghostButton {
+  border: 1px solid var(--line-strong);
+  color: #566052;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.dangerButton {
+  border: 1px solid rgba(155, 77, 58, 0.28);
+  color: #9b4d3a;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.ghostButton:disabled,
+.dangerButton:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+
+.ghostButton:focus-visible,
+.dangerButton:focus-visible {
+  outline: 2px solid #66735d;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ghostButton:not(:disabled):hover,
+  .dangerButton:not(:disabled):hover {
+    background: rgba(255, 255, 255, 0.78);
+  }
+}
+
+@media (max-width: 640px) {
+  .confirmOverlay {
+    padding: 16px;
+  }
+
+  .confirmCard {
+    width: 100%;
+    max-height: calc(100vh - 32px);
+    padding: 22px 18px 16px;
+  }
+}

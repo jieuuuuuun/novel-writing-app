@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   defaultLocale,
   getMessages,
@@ -109,6 +110,19 @@ export default function LandingPage() {
           <LandingCta copy={copy.landing} variant="bottom" />
         </section>
       </main>
+
+      <footer className={styles.footer}>
+        <nav
+          className={styles.footerLinks}
+          aria-label={copy.settings.legalTitle}
+        >
+          <Link href="/privacy">{copy.legal.privacyTitle}</Link>
+          <Link href="/terms">{copy.legal.termsTitle}</Link>
+          <Link href="/account-deletion">
+            {copy.legal.accountDeletionTitle}
+          </Link>
+        </nav>
+      </footer>
     </div>
   );
 }

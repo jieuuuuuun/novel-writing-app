@@ -5,9 +5,14 @@ interface LandingPreviewProps {
   copy: Messages;
 }
 
-export default function LandingPreview({ copy }: LandingPreviewProps) {
-  const navItems = Object.values(copy.navigation);
+// 실제 /works 사이드바와 같게 v1에서는 작품 목록과 설정만 보여 줍니다.
+const v1PreviewNavKeys = ["works", "settings"] as const;
+const previewNavIcons: Record<(typeof v1PreviewNavKeys)[number], string> = {
+  works: "▤",
+  settings: "⚙",
+};
 
+export default function LandingPreview({ copy }: LandingPreviewProps) {
   return (
     <section
       className={styles.previewWrap}
@@ -21,16 +26,16 @@ export default function LandingPreview({ copy }: LandingPreviewProps) {
               <span className={styles.leafMark} />
             </div>
             <div className={styles.previewNav}>
-              {navItems.map((item, index) =>
+              {v1PreviewNavKeys.map((key, index) =>
                 index === 0 ? (
-                  <strong key={item}>
-                    <span>▤</span>
-                    {item}
+                  <strong key={key}>
+                    <span>{previewNavIcons[key]}</span>
+                    {copy.navigation[key]}
                   </strong>
                 ) : (
-                  <span key={item}>
-                    <span>{["⌁", "□", "◎", "⚙"][index - 1]}</span>
-                    {item}
+                  <span key={key}>
+                    <span>{previewNavIcons[key]}</span>
+                    {copy.navigation[key]}
                   </span>
                 ),
               )}

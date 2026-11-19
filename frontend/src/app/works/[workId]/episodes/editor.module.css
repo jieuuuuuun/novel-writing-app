@@ -56,8 +56,12 @@
 }
 
 .saveActions > span {
+  min-width: 0;
+  overflow: hidden;
   color: #8b887e;
-  font-size: 9px;
+  font-size: 11px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -789,9 +793,12 @@
 
   .saveActions {
     order: 2;
+    min-width: 0;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    gap: 8px;
   }
 
-  .saveActions > span,
   .saveActions i {
     display: none;
   }
@@ -832,10 +839,16 @@
   }
 
   .saveActions {
-    gap: 7px;
+    gap: 8px;
+  }
+
+  .saveActions > span {
+    flex: 1 1 0;
+    font-size: 11px;
   }
 
   .saveActions > button {
+    flex: 0 0 auto;
     min-width: 65px;
     padding-inline: 12px;
   }

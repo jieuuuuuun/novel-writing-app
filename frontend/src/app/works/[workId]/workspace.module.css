@@ -224,14 +224,7 @@
 }
 
 .topbarActions > button i {
-  position: absolute;
-  top: 4px;
-  right: 2px;
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--cream);
-  border-radius: 50%;
-  background: #b9683e;
+  display: none;
 }
 
 .topbarActions > span {

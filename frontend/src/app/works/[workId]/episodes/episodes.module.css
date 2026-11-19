@@ -262,17 +262,17 @@
 
 .rowActions a,
 .rowActions button {
-  min-height: 29px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 9px;
+  padding: 0 11px;
   border: 1px solid var(--line);
-  border-radius: 5px;
+  border-radius: 6px;
   color: #646b61;
   background: rgba(255, 255, 255, 0.42);
   font: inherit;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -401,7 +401,9 @@
 
   .rowActions a,
   .rowActions button {
-    padding-inline: 7px;
+    min-height: 38px;
+    padding-inline: 10px;
+    font-size: 12px;
   }
 }
 
@@ -529,6 +531,14 @@
   .rowActions {
     grid-column: 2;
     justify-self: end;
+    gap: 6px;
+  }
+
+  .rowActions a,
+  .rowActions button {
+    min-width: 52px;
+    min-height: 40px;
+    padding-inline: 12px;
   }
 
   .emptyState {

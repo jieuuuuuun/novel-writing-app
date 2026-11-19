@@ -35,6 +35,9 @@ function formatWorkDate(value: string, locale: Locale) {
   }).format(new Date(value));
 }
 
+// v1에서는 전체 목록만 보여 줍니다. v1.1에서 작성 중/완료 필터를 다시 켜면 됩니다.
+const showV11StatusFilters = false;
+
 export default function EpisodeListPage({ workId }: EpisodeListPageProps) {
   const locale = defaultLocale;
   const copy = getMessages(locale);
@@ -253,20 +256,24 @@ export default function EpisodeListPage({ workId }: EpisodeListPageProps) {
                   <button type="button" className={styles.activeFilter}>
                     {copy.workspace.episodeList.all(episodes.length)}
                   </button>
-                  <button
-                    type="button"
-                    disabled
-                    title={copy.workspace.episodeList.preparing}
-                  >
-                    {copy.workspace.episodeList.drafting}
-                  </button>
-                  <button
-                    type="button"
-                    disabled
-                    title={copy.workspace.episodeList.preparing}
-                  >
-                    {copy.workspace.episodeList.completed}
-                  </button>
+                  {showV11StatusFilters ? (
+                    <>
+                      <button
+                        type="button"
+                        disabled
+                        title={copy.workspace.episodeList.preparing}
+                      >
+                        {copy.workspace.episodeList.drafting}
+                      </button>
+                      <button
+                        type="button"
+                        disabled
+                        title={copy.workspace.episodeList.preparing}
+                      >
+                        {copy.workspace.episodeList.completed}
+                      </button>
+                    </>
+                  ) : null}
                   <span className={styles.sortLabel}>
                     <i aria-hidden="true">⇅</i>
                     {copy.workspace.episodeList.latestUpdated}

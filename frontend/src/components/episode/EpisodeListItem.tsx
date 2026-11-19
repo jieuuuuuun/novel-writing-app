@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import ConfirmDialog from "@/components/confirm/ConfirmDialog";
 import type { Locale, Messages } from "@/i18n/messages";
 import type { Episode } from "@/types/episode";
 import styles from "@/app/works/[workId]/episodes/episodes.module.css";
@@ -30,15 +31,14 @@ export default function EpisodeListItem({
   onDelete,
 }: EpisodeListItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const preview = episode.content.replace(/\s+/g, " ").trim();
   const characterCount = new Intl.NumberFormat(locale).format(
     episode.content.length,
   );
 
-  // 삭제 확인 후 상위 목록에 완료 사실을 전달해 해당 row를 제거합니다.
+  // 확인 후 상위 목록에 완료 사실을 전달해 해당 row를 제거합니다.
   const handleDelete = async () => {
-    if (!window.confirm(copy.episodeList.deleteConfirm)) return;
-
     setIsDeleting(true);
     try {
       await onDelete(episode.id);
@@ -80,7 +80,7 @@ export default function EpisodeListItem({
           <button
             type="button"
             disabled={isDeleting}
-            onClick={() => void handleDelete()}
+            onClick={() => setIsConfirmOpen(true)}
           >
             {isDeleting
               ? copy.episodeList.deleting
@@ -96,6 +96,24 @@ export default function EpisodeListItem({
           ›
         </Link>
       </div>
+
+      {isConfirmOpen ? (
+        <ConfirmDialog
+          titleId={`delete-episode-${episode.id}-title`}
+          title={copy.episodeList.deleteTitle}
+          description={copy.episodeList.deleteDescription}
+          cancelLabel={copy.episodeList.deleteCancel}
+          confirmLabel={copy.episodeList.delete}
+          confirmBusyLabel={copy.episodeList.deleting}
+          isBusy={isDeleting}
+          onCancel={() => {
+            if (!isDeleting) {
+              setIsConfirmOpen(false);
+            }
+          }}
+          onConfirm={() => void handleDelete()}
+        />
+      ) : null}
     </li>
   );
 }

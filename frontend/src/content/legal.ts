@@ -269,15 +269,15 @@ export const termsDocument: LegalDocument = {
 export const accountDeletionDocument: LegalDocument = {
   title: "계정 삭제 안내",
   intro:
-    "ArcNote 계정은 앱/웹의 설정 → 계정 삭제에서 직접 삭제할 수 있습니다.",
+    "아크노트 계정은 앱/웹의 설정 → 계정 삭제에서 직접 삭제할 수 있습니다.",
   sections: [
     {
       heading: "삭제되는 데이터",
       paragraphs: [
-        "계정을 삭제하면 ArcNote에 저장된 관련 데이터가 삭제됩니다. 여기에는 다음이 포함됩니다.",
+        "계정을 삭제하면 아크노트에 저장된 관련 데이터가 삭제됩니다. 여기에는 다음이 포함됩니다.",
       ],
       bullets: [
-        "ArcNote 계정 정보",
+        "아크노트 계정 정보",
         "작성한 작품",
         "작품 기획",
         "등장인물",
@@ -291,7 +291,7 @@ export const accountDeletionDocument: LegalDocument = {
       heading: "Google 계정",
       paragraphs: [
         "Google 계정 자체는 삭제되지 않습니다.",
-        "같은 Google 계정으로 다시 로그인하면 새 ArcNote 계정이 생성될 수 있습니다.",
+        "같은 Google 계정으로 다시 로그인하면 새 아크노트 계정이 생성될 수 있습니다.",
       ],
     },
     {

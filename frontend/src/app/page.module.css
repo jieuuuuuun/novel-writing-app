@@ -321,14 +321,7 @@
 }
 
 .notificationButton i {
-  position: absolute;
-  top: 4px;
-  right: 3px;
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--cream);
-  border-radius: 50%;
-  background: #bd693d;
+  display: none;
 }
 
 .profileButton {
@@ -795,15 +788,15 @@
 }
 
 .workActions button {
-  min-width: 47px;
-  min-height: 30px;
-  padding: 0 9px;
+  min-width: 52px;
+  min-height: 36px;
+  padding: 0 11px;
   border: 1px solid var(--line);
-  border-radius: 5px;
+  border-radius: 6px;
   color: #646b61;
   background: rgba(255, 255, 255, 0.42);
   font: inherit;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1423,9 +1416,10 @@
   }
 
   .workActions button {
-    min-width: 54px;
-    min-height: 36px;
-    font-size: 10px;
+    min-width: 56px;
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 12px;
   }
 
   .workRowArrow {

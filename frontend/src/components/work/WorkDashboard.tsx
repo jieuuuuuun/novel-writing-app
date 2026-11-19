@@ -23,6 +23,7 @@ import NewWorkModal from "./NewWorkModal";
 import WorkSearch from "./WorkSearch";
 import WorkSidebar from "./WorkSidebar";
 import UserMenu from "@/components/auth/UserMenu";
+import ConfirmDialog from "@/components/confirm/ConfirmDialog";
 import styles from "@/app/page.module.css";
 
 function formatDate(value: string, locale: Locale) {
@@ -61,6 +62,9 @@ export default function WorkDashboard() {
   const [deletingWorkId, setDeletingWorkId] = useState<number | null>(
     null,
   );
+  const [pendingDeleteWorkId, setPendingDeleteWorkId] = useState<
+    number | null
+  >(null);
 
   // 등록 후 갱신하거나 조회 실패를 재시도할 때 목록을 다시 불러옵니다.
   const refreshWorks = async () => {
@@ -148,16 +152,15 @@ export default function WorkDashboard() {
     );
   };
 
-  // cascade 삭제를 확인한 뒤 성공한 작품을 현재 목록에서 제거합니다.
+  // 확인 후 cascade 삭제를 호출하고, 성공한 작품을 현재 목록에서 제거합니다.
   const handleDelete = async (workId: number) => {
-    if (!window.confirm(copy.dashboard.deleteWorkConfirm)) return;
-
     setDeletingWorkId(workId);
     try {
       await deleteWork(workId);
       setWorks((current) =>
         current.filter((work) => work.id !== workId),
       );
+      setPendingDeleteWorkId(null);
     } catch {
       window.alert(copy.dashboard.deleteWorkError);
     } finally {
@@ -423,7 +426,7 @@ export default function WorkDashboard() {
                           <button
                             type="button"
                             disabled={deletingWorkId === work.id}
-                            onClick={() => void handleDelete(work.id)}
+                            onClick={() => setPendingDeleteWorkId(work.id)}
                           >
                             {deletingWorkId === work.id
                               ? copy.dashboard.deleting
@@ -462,6 +465,24 @@ export default function WorkDashboard() {
           work={editingWork}
           onClose={() => setEditingWork(null)}
           onUpdate={handleUpdate}
+        />
+      ) : null}
+
+      {pendingDeleteWorkId != null ? (
+        <ConfirmDialog
+          titleId="delete-work-title"
+          title={copy.dashboard.deleteWorkTitle}
+          description={copy.dashboard.deleteWorkDescription}
+          cancelLabel={copy.modal.cancel}
+          confirmLabel={copy.dashboard.delete}
+          confirmBusyLabel={copy.dashboard.deleting}
+          isBusy={deletingWorkId === pendingDeleteWorkId}
+          onCancel={() => {
+            if (deletingWorkId == null) {
+              setPendingDeleteWorkId(null);
+            }
+          }}
+          onConfirm={() => void handleDelete(pendingDeleteWorkId)}
         />
       ) : null}
     </div>

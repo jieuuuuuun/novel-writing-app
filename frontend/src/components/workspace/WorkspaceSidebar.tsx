@@ -20,6 +20,17 @@ interface WorkspaceSidebarProps {
 
 const navigationIcons = ["⌂", "▤", "♙", "⌘", "◇", "□", "▱", "⚙"];
 
+// v1에서는 작품별 설정을 노출하지 않습니다. v1.1에서 settings를 다시 넣으면 됩니다.
+const v1NavigationKeys = new Set([
+  "home",
+  "planning",
+  "characters",
+  "relationships",
+  "world",
+  "synopsis",
+  "episodes",
+]);
+
 export default function WorkspaceSidebar({
   copy,
   brand,
@@ -62,14 +73,10 @@ export default function WorkspaceSidebar({
 
       <nav aria-label={copy.navigation[activeMenu]}>
         {navigation.map(([key, item], index) => {
-          const isAvailable =
-            key === "home" ||
-            key === "planning" ||
-            key === "characters" ||
-            key === "relationships" ||
-            key === "world" ||
-            key === "synopsis" ||
-            key === "episodes";
+          if (!v1NavigationKeys.has(key)) {
+            return null;
+          }
+
           const href =
             key === "planning"
               ? `/works/${workId}/planning`
@@ -85,7 +92,7 @@ export default function WorkspaceSidebar({
                         ? `/works/${workId}/episodes`
                         : `/works/${workId}`;
 
-          return isAvailable ? (
+          return (
             <Link
               className={
                 key === activeMenu ? styles.activeNavItem : styles.navItem
@@ -97,17 +104,6 @@ export default function WorkspaceSidebar({
               <span aria-hidden="true">{navigationIcons[index]}</span>
               {item}
             </Link>
-          ) : (
-            <button
-              className={styles.navItem}
-              type="button"
-              key={item}
-              disabled
-              title={copy.quickLinks.preparing}
-            >
-              <span aria-hidden="true">{navigationIcons[index]}</span>
-              {item}
-            </button>
           );
         })}
       </nav>

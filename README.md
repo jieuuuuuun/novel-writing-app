@@ -1,92 +1,218 @@
 # 아크노트 (ArcNote)
 
-> 웹소설의 아이디어 구상부터 작품 관리, 회차별 집필까지 이어지는 창작 워크스페이스
+> 웹소설 창작자를 위한 글쓰기·작품 관리 웹앱
 
-웹소설을 즐겨 읽으며 자연스럽게 창작 과정과 글쓰기 도구에 관심을 가지게 되었고,  
+웹소설을 즐겨 읽으며 창작 과정과 글쓰기 도구에 관심을 가지게 되었고,
 기존에 사용해 본 글쓰기 서비스에서 느낀 장점과 불편함을 바탕으로 직접 기획하고 개발한 프로젝트입니다.
 
-현재는 **작품 관리와 회차별 집필이 가능한 MVP**까지 구현했으며,  
-향후 Google 로그인, 작품 기획, 등장인물, 관계도, 세계관, 시놉시스 등 창작 과정 전반을 관리할 수 있는 서비스로 확장할 예정입니다.
+v1은 Google 계정으로 로그인한 뒤, 작품 기획부터 회차 집필까지 한 공간에서 이어 갈 수 있는 창작 워크스페이스입니다.
 
 ---
 
-## 🖼 Preview
+## Preview
 
 ![아크노트 작품 목록](./docs/images/work-list.png)
 
 ---
 
-## 🔗 Demo
+## Demo
 
-🌐 **[아크노트 바로가기](https://novel-writing-app-olive.vercel.app)**
+🌐 **[아크노트](https://novel-writing-app-olive.vercel.app)**
 
-> 현재는 로그인 기능 구현 전 단계로 Demo User를 사용하는 MVP 버전입니다.
+Frontend는 Vercel, Backend와 MySQL은 Railway에 구성했습니다.
+Railway 인스턴스가 일시 중지되어 있으면 로그인이 되지 않을 수 있습니다.
 
 ---
 
-## ✨ 주요 기능
+## 주요 기능
 
-### 📚 작품 관리
+### 작품 관리
 
-- 작품 생성
-- 작품 목록 조회
+- 작품 생성, 조회, 제목·부제 수정, 삭제
 - 작품 검색
-- 작품 제목 및 부제 수정
-- 작품 삭제
 - 최근 작업 작품 표시
-- 작품별 워크스페이스 제공
+- 작품별 워크스페이스
+- 작품 삭제 시 연결된 데이터 Cascade 삭제
 
 ![작품 워크스페이스](./docs/images/workspace.png)
 
-### 📝 회차 관리
+### 작품 기획·설정
+
+- 작품 기획 (장르, 로그라인, 소개 등)
+- 등장인물 관리
+- 등장인물 프로필 및 사용자 정의 항목
+- 등장인물 관계 관리 (인물 쌍, 관계 설명)
+- 세계관 설정 (작품당 하나)
+
+### 시놉시스
+
+- 시놉시스 버전 관리
+- 새 버전 작성, 복제, 현재 버전 지정, 삭제
+
+### 회차 집필
 
 - 작품별 회차 목록
-- 새 회차 작성
-- 회차 상세 조회
-- 회차 수정
-- 회차 삭제
-- 회차 순서 지정
-- 중복 회차 번호 검증
-- 글자 수 표시
-- 저장 상태 표시
+- 회차 작성·상세·수정·삭제
+- 회차 순서(`sortOrder`) 지정과 중복 번호 검증
+- 글자 수·저장 상태 표시
+- 회차 에디터 Reference Panel
+  - 등장인물
+  - 관계도
+  - 세계관
+  - 현재 시놉시스
 
 ![회차 목록](./docs/images/episode-list.png)
 
 ![회차 에디터](./docs/images/episode-editor.png)
 
-### 📱 UX / UI
+### 계정·정책
+
+- Google OAuth 로그인
+- 로그인 사용자 기준 데이터 분리
+- 설정, 로그아웃, 계정 삭제
+- 개인정보처리방침, 이용약관, 계정 삭제 안내
+
+### UX
 
 - PC / Mobile 반응형 UI
 - 모바일 Sidebar → Drawer 전환
-- 작품 및 회차 Empty / Loading / Error 상태 처리
-- 잘못된 작품 및 회차 ID 접근 처리
-- 작성 화면의 참고 패널 UI
-- 작품 삭제 시 연결된 회차 Cascade 삭제
+- Empty / Loading / Error, 잘못된 ID 접근 안내
 
 <p align="center">
   <img src="./docs/images/mobile.png" alt="아크노트 모바일 반응형 화면" width="320" />
 </p>
 
+v1에는 통계, 자료실, AI 생성, 자동 저장, 리치 텍스트 에디터, 알림, 회차 상태 필터, 관계도 그래프 시각화는 포함하지 않습니다.
+
 ---
 
-## 🛠 Tech Stack
+## 기술 스택
 
 | 영역 | 기술 |
 |---|---|
-| Frontend | Next.js 16, React 19, TypeScript |
-| Routing | App Router |
-| Styling | CSS Modules |
-| State | React Hooks |
-| Backend | NestJS |
-| ORM | Prisma |
+| Frontend | Next.js 16, React 19, TypeScript, App Router, CSS Modules |
+| Backend | NestJS, REST API |
+| ORM | Prisma 7 |
 | Database | MySQL |
-| API | REST API, Swagger |
-| Deployment | Vercel, Railway |
+| 인증 | Google OAuth, JWT, httpOnly cookie |
+| Deployment | Vercel (Frontend), Railway (Backend, MySQL) |
 | Version Control | Git, GitHub |
+
+Swagger는 개발 환경에서만 켜 두었습니다. Production에서는 비활성화합니다.
 
 ---
 
-## 🏗 Architecture
+## 프로젝트 구조
+
+```text
+novel-writing-app/
+├── frontend/          Next.js (Vercel)
+├── backend/           NestJS + Prisma (Railway)
+│   └── prisma/        스키마, 마이그레이션
+└── docs/images/       README 스크린샷
+```
+
+화면 구조는 작품·회차 계층이 URL에 드러나도록 구성했습니다.
+
+```text
+/
+/works
+/works/[workId]
+/works/[workId]/planning
+/works/[workId]/characters
+/works/[workId]/relations
+/works/[workId]/world
+/works/[workId]/synopsis
+/works/[workId]/episodes
+/works/[workId]/episodes/new
+/works/[workId]/episodes/[episodeId]
+/works/[workId]/episodes/[episodeId]/edit
+/settings
+/privacy
+/terms
+/account-deletion
+```
+
+Frontend는 `/api/auth`, `/api/work`, `/api/episode`를 NestJS로 rewrite합니다.
+OAuth 콜백은 Frontend origin(`/api/auth/google/callback`)을 사용해 JWT 쿠키가 브라우저의 Frontend 도메인에 저장됩니다.
+
+### 데이터 모델 (요약)
+
+```text
+USER
+ └── WORK
+      ├── EPISODE (N)
+      ├── PLANNING (1)
+      ├── CHARACTER (N)
+      │    ├── PROFILE (1)
+      │    └── CUSTOM FIELD (N)
+      ├── CHARACTER RELATION (N)
+      ├── WORLD SETTING (1)
+      └── SYNOPSIS VERSION (N)
+           └── Work.currentSynopsisVersionId
+```
+
+작품 삭제 시 하위 데이터는 Prisma `onDelete: Cascade`로 함께 삭제됩니다.
+
+---
+
+## 실행 방법
+
+Backend 실행 전 MySQL을 켜고, 각 폴더의 `.env.example`을 참고해 `.env`를 준비합니다. 실제 비밀값은 저장소에 넣지 않습니다.
+
+### Backend
+
+```bash
+cd backend
+npm install
+npx prisma generate
+npm run start:dev
+```
+
+기본 포트는 `3001`입니다.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+기본 포트는 `3000`입니다.
+
+---
+
+## 환경변수
+
+세부 키와 설명은 `.env.example`을 기준으로 합니다.
+
+### Frontend (`frontend/.env.example`)
+
+| 변수 | 역할 |
+|---|---|
+| `BACKEND_URL` | NestJS 서버 주소. Next.js rewrite가 이 값을 사용합니다. |
+| `NEXT_PUBLIC_DEFAULT_LOCALE` | UI 기본 언어. `ko` 또는 `en` |
+
+로컬 예: `BACKEND_URL=http://localhost:3001`, `NEXT_PUBLIC_DEFAULT_LOCALE=ko`
+
+### Backend (`backend/.env.example`)
+
+| 변수 | 역할 |
+|---|---|
+| `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME` | NestJS가 사용하는 DB 접속 정보 |
+| `DATABASE_URL` | Prisma CLI용 연결 URL. 위 DB와 같은 대상을 가리켜야 합니다. |
+| `PORT` | NestJS 포트 (로컬 기본 `3001`) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google OAuth |
+| `GOOGLE_CALLBACK_URL` | 브라우저가 실제로 방문하는 콜백 URL. 로컬은 `http://localhost:3000/api/auth/google/callback` |
+| `JWT_SECRET`, `JWT_EXPIRES_IN` | JWT 서명·만료 |
+| `FRONTEND_URL` | Frontend origin (로컬 `http://localhost:3000`) |
+
+`.env`와 Secret 값은 Git에 포함하지 않습니다.
+
+---
+
+## 배포 구조
 
 ```text
 User
@@ -94,7 +220,7 @@ User
  ▼
 Vercel
 Next.js
- │
+ │  /api/* rewrite
  ▼
 Railway
 NestJS REST API
@@ -110,199 +236,36 @@ Railway MySQL
   <img src="./docs/images/deployment.png" alt="배포 구조" width="900" />
 </p>
 
----
+- Frontend Root Directory: `/frontend` (Vercel)
+- Backend Root Directory: `/backend` (Railway)
+- Database: Railway MySQL
+- Production 마이그레이션: `npx prisma migrate deploy`
 
-## 🗃 Database
-
-현재 MVP는 사용자, 작품, 회차의 계층 관계를 중심으로 구성되어 있습니다.
-
-```text
-USER
- │ 1
- │
- └──── N WORK
-          │ 1
-          │
-          └──── N EPISODE
-```
-
-- **User**: 사용자 기본 정보
-- **Work**: 사용자별 작품 제목과 부제
-- **Episode**: 작품별 회차 본문과 순서
-
-작품 삭제 시 해당 작품의 회차도 함께 삭제되도록 Prisma Relation에 `onDelete: Cascade`를 적용했습니다.
-
----
-
-## 🔌 API
-
-```http
-Work CRUD    /work, /work/:id
-Episode CRUD /episode, /episode/:id
-```
-
-NestJS와 Prisma로 작품 및 회차의 생성, 조회, 수정, 삭제 REST API를 구현하고 Swagger 문서를 제공합니다.
-
----
-
-## 💡 주요 구현 내용
-
-### 1. Next.js App Router 기반 화면 구조
-
-작품과 회차의 계층이 URL에도 드러나도록 동적 Route를 구성했습니다.
-
-```text
-/works
-/works/[workId]
-/works/[workId]/episodes
-/works/[workId]/episodes/new
-/works/[workId]/episodes/[episodeId]
-/works/[workId]/episodes/[episodeId]/edit
-```
-
-### 2. 작품과 회차 CRUD 구현
-
-NestJS + Prisma REST API를 Next.js의 Fetch API와 연동해 작품과 회차의 전체 CRUD 흐름을 구현했습니다.
-
-### 3. 회차 순서 관리
-
-`sortOrder`로 작품 내 회차 순서를 관리합니다. 가장 큰 순서의 다음 번호를 기본으로 제안하고, 사용자가 변경한 번호는 동일 작품 내 중복 여부를 Frontend에서 검증합니다.
-
-### 4. Create / Edit 화면 공통화
-
-회차 작성과 수정에서 `EpisodeEditorPage`를 공통으로 사용하되 동작은 모드별로 분리했습니다.
-
-```text
-Create Mode → POST /episode
-Edit Mode   → PATCH /episode/:id
-```
-
-### 5. 사용자 상태를 고려한 UI
-
-Loading, Error, Empty, Invalid ID, Backend Connection Error 상태를 분리해 API 서버가 꺼져 있거나 잘못된 경로에 접근해도 안내 화면을 제공합니다.
-
-### 6. 반응형 UI
-
-모바일에서는 Sidebar를 Drawer로 전환하고, 작품 목록부터 에디터까지 화면별 레이아웃을 최적화했습니다.
-
----
-
-## 🚀 Deployment
-
-Frontend는 Vercel의 `/frontend`, Backend는 Railway의 `/backend`를 Root Directory로 지정해 배포했습니다. Database는 Railway MySQL을 사용하며, Pre-deploy 단계에서 Production Migration을 적용합니다.
-
-```bash
-npx prisma migrate deploy
-```
-
----
-
-## 🔧 배포 과정에서 해결한 문제
-
-### 1. Prisma Client 미생성으로 Production Build 실패
-
-Railway 최초 배포에서 다음 오류가 발생했습니다.
-
-```text
-Cannot find module '../generated/prisma/client.js'
-```
-
-로컬에만 존재하던 Prisma Client가 새로운 Railway 빌드 환경에는 생성되지 않아 관련 타입 오류가 연쇄적으로 발생했습니다. Build Script에 Client 생성을 추가해 해결했습니다.
+Railway 최초 배포에서 Prisma Client가 빌드 환경에 없어 `Cannot find module '.../generated/prisma/client.js'`가 났습니다. Backend build script에 Client 생성을 넣어 해결했습니다.
 
 ```json
 "build": "prisma generate && nest build"
 ```
 
-### 2. Production DB Foreign Key 오류
+---
 
-배포 후 작품 생성 시 다음 오류로 API가 `500 Error`를 반환했습니다.
+## AI-assisted Development
 
-```text
-ForeignKeyConstraintViolation
-fields: user_id
-```
+아크노트는 ChatGPT와 Cursor를 개발 보조 도구로 활용해 제작했습니다.
 
-인증 전 임시로 사용하는 Demo User가 새 Production DB에 존재하지 않아 발생한 문제였습니다. Production DB에 Demo User를 생성한 뒤 작품 및 회차 CRUD 동작을 확인했습니다.
+기능 기획, 요구사항 정의, 구조 결정, 구현 검토, 브라우저 테스트는 직접 진행했습니다.
+AI는 코드 초안, 리팩터링 제안, 테스트 케이스 작성, 문제 분석을 보조했습니다.
+
+AI가 생성한 결과를 그대로 쓰지 않았습니다. 실제 동작 확인과 수정 과정을 거친 뒤에 반영했습니다.
 
 ---
 
-## ✅ 배포 후 테스트
+## 향후 계획 (v1.1)
 
-Production 환경에서 작품/회차 CRUD, 새로고침 후 데이터 유지, Cascade 삭제, 모바일 UI, 오류 상태와 Vercel·Railway 배포 상태를 확인했습니다.
+v1.1에서는 아래를 짧게 다듬을 예정입니다.
 
----
+- 회차 저장 경험 (상태 표시, 작성 흐름)
+- Android / Google Play 패키징에 필요한 아이콘·스토어 자산
+- 관계 정보의 읽기 경험
 
-## 📂 Environment Variables
-
-- **Frontend**: Backend URL, Demo User ID, 기본 Locale
-- **Backend**: MySQL 연결 정보, Prisma Database URL, 서버 Port
-
-세부 항목은 각 서비스의 `.env.example`을 참고하며, 실제 `.env` 파일과 Secret 값은 Git Repository에 포함하지 않습니다.
-
----
-
-## ▶️ Local Development
-
-### Frontend
-
-```bash
-cd frontend
-npm install && npm run dev
-```
-
-### Backend
-
-```bash
-cd backend
-npm install
-npx prisma generate && npm run start:dev
-```
-
-> Backend 실행 전 MySQL 실행 및 환경변수 설정이 필요합니다.
-
----
-
-## 🗺 Roadmap
-
-현재는 작품 및 회차 관리 중심의 MVP 단계입니다.
-
-```text
-Google Login
-↓
-사용자별 데이터 분리
-↓
-작품 기획
-↓
-등장인물
-↓
-관계도
-↓
-세계관
-↓
-시놉시스
-↓
-집필 워크스페이스 확장
-↓
-보안 / 권한 관리
-↓
-서비스 확장 시 AWS 인프라 이전 검토
-```
-
-특히 다음 단계에서는 Google OAuth를 구현하여 현재 사용 중인 Demo User 방식을 제거하고 로그인한 사용자별로 작품과 회차를 관리하도록 변경할 예정입니다.
-
----
-
-## 🎯 Project Goal
-
-단순히 글을 입력하는 에디터를 만드는 것이 아니라,
-
-```text
-아이디어 구상
-→ 작품 기획
-→ 등장인물 / 관계
-→ 세계관
-→ 시놉시스
-→ 회차별 집필
-```
-
-까지 하나의 공간에서 이어지는 웹소설 창작 워크스페이스를 만드는 것이 목표입니다.
+통계, 자료실, AI 생성, 자동 저장은 v1.1 범위에 넣지 않았습니다.

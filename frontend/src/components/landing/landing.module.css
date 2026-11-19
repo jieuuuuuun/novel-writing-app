@@ -519,13 +519,35 @@
   margin-top: 8px;
 }
 
+.footer {
+  padding: 0 clamp(20px, 5vw, 72px) 36px;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  max-width: 100%;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.footerLinks a {
+  color: #5d6259;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 .mobileNav {
   display: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .headerNav a:hover,
-  .mobileNav a:hover {
+  .mobileNav a:hover,
+  .footerLinks a:hover {
     color: #2e392e;
   }
 
@@ -586,6 +608,19 @@
   .header {
     min-height: 64px;
     padding-inline: 16px;
+  }
+
+  .footer {
+    padding-inline: 16px;
+    padding-bottom: 28px;
+  }
+
+  .footerLinks {
+    gap: 10px 16px;
+  }
+
+  .footerLinks a {
+    font-size: 12px;
   }
 
   .brand {
