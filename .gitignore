@@ -1,0 +1,11 @@
+# Android signing keys
+*.keystore
+*.jks
+
+# Android build outputs
+android-twa/.gradle/
+android-twa/build/
+android-twa/app/build/
+*.apk
+*.aab
+*.idsig
